@@ -28,7 +28,7 @@ const (
 	StatusOK                   = http.StatusOK
 	StatusCreated              = http.StatusCreated
 	StatusAccepted             = http.StatusAccepted
-	StatusNonAuthoritativeInfo = http.StatusNonAuthorativeInfo
+	StatusNonAuthoritativeInfo = http.StatusNonAuthoritativeInfo
 	StatusNoContent            = http.StatusNoContent
 	StatusResetContent         = http.StatusResetContent
 	StatusPartialContent       = http.StatusPartialContent
@@ -53,7 +53,7 @@ const (
 	StatusNotFound                     = http.StatusNotFound
 	StatusMethodNotAllowed             = http.StatusMethodNotAllowed
 	StatusNotAcceptable                = http.StatusNotAcceptable
-	StatusProxyAuthRequired            = http.StatusproxyAuthRequired
+	StatusProxyAuthRequired            = http.StatusProxyAuthRequired
 	StatusRequestTimeout               = http.StatusRequestTimeout
 	StatusConflict                     = http.StatusConflict
 	StatusGone                         = http.StatusGone

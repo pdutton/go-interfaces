@@ -2,15 +2,18 @@ package http
 
 import (
 	"context"
+	"crypto/tls"
+	"log"
 	"net"
 	"net/http"
+	"time"
 )
 
 // Server is an interface for the net/http.Server struct
 type Server interface {
 	Close() error
 	ListenAndServe() error
-	ListenAndServeTLS() error
+	ListenAndServeTLS(string, string) error
 	RegisterOnShutdown(func())
 	Serve(net.Listener) error
 	ServeTLS(net.Listener, string, string) error
@@ -43,7 +46,7 @@ func WithDisableGeneralOptionsHandler(v bool) ServerOption {
 }
 
 // Set the net/http.Server TLSConfig
-func WithTLSConfig(cfg *tlsConfig) ServerOption {
+func WithTLSConfig(cfg *tls.Config) ServerOption {
 	return func(svr *http.Server) {
 		svr.TLSConfig = cfg
 	}
@@ -121,19 +124,25 @@ func WithConnContext(f func(context.Context, net.Conn) context.Context) ServerOp
 	}
 }
 
+// This was added in go 1.24
+/*
 // Set the net/http.Server HTTP2
 func WithHTTP2(cfg *HTTP2Config) ServerOption {
 	return func(svr *http.Server) {
 		svr.HTTP2 = cfg
 	}
 }
+*/
 
+// This was added in go 1.24
+/*
 // Set the net/http.Server Protocols
 func WithProtocols(p *Protocols) ServerOption {
 	return func(svr *http.Server) {
 		svr.Protocols = p
 	}
 }
+*/
 
 type serverFacade struct {
 	realServer http.Server
@@ -150,35 +159,35 @@ func NewServer(options ...ServerOption) Server {
 	return facade
 }
 
-func (s Server) Close() error {
+func (s serverFacade) Close() error {
 	return s.realServer.Close()
 }
 
-func (s Server) ListenAndServe() error {
+func (s serverFacade) ListenAndServe() error {
 	return s.realServer.ListenAndServe()
 }
 
-func (s Server) ListenAndServeTLS() error {
-	return s.realServer.ListenAndServeTLS()
+func (s serverFacade) ListenAndServeTLS(certFile, keyFile string) error {
+	return s.realServer.ListenAndServeTLS(certFile, keyFile)
 }
 
-func (s Server) RegisterOnShutdown(f func()) {
-	return s.realServer.RegisterOnShutdown(f)
+func (s serverFacade) RegisterOnShutdown(f func()) {
+	s.realServer.RegisterOnShutdown(f)
 }
 
-func (s Server) Serve(l net.Listener) error {
+func (s serverFacade) Serve(l net.Listener) error {
 	return s.realServer.Serve(l)
 }
 
-func (s Server) ServeTLS(l net.Listener, certFile, keyFile string) error {
+func (s serverFacade) ServeTLS(l net.Listener, certFile, keyFile string) error {
 	return s.realServer.ServeTLS(l, certFile, keyFile)
 }
 
-func (s Server) SetKeepAlivesEnabled(v bool) {
-	return s.realServer.SetKeepAlivesEnabled(v)
+func (s serverFacade) SetKeepAlivesEnabled(v bool) {
+	s.realServer.SetKeepAlivesEnabled(v)
 }
 
-func (s Server) Shutdown(ctx context.Context) error {
+func (s serverFacade) Shutdown(ctx context.Context) error {
 	return s.realServer.Shutdown(ctx)
 }
 

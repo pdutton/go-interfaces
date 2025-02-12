@@ -1,7 +1,9 @@
 package http
 
 import (
+	"crypto/tls"
 	"io"
+	"mime/multipart"
 	"net/http"
 	"net/url"
 )
