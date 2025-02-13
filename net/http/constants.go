@@ -90,15 +90,15 @@ const (
 )
 
 const (
-	DefaultMaxHeaderBytes = http.DefaultMaxHeaderBytes
+	DefaultMaxHeaderBytes      = http.DefaultMaxHeaderBytes
 	DefaultMaxIdleConnsPerHost = http.DefaultMaxIdleConnsPerHost
-	TimeFormat = http.TimeFormat
-	TrailerPrefix = http.TrailerPrefix
+	TimeFormat                 = http.TimeFormat
+	TrailerPrefix              = http.TrailerPrefix
 )
 
 var (
 	ErrNotSupported         = http.ErrNotSupported
-	ErrUnexpectedTrailer    = http.ErrUnexpectedTrailer    // Deprecated
+	ErrUnexpectedTrailer    = http.ErrUnexpectedTrailer // Deprecated
 	ErrMissingBoundary      = http.ErrMissingBoundary
 	ErrNotMultipart         = http.ErrNotMultipart
 	ErrHeaderTooLong        = http.ErrHeaderTooLong        // Deprecated
@@ -128,4 +128,3 @@ var (
 	ErrUseLastResponse    = http.ErrUseLastResponse
 	NoBody                = http.NoBody
 )
-

@@ -2,15 +2,15 @@ package http
 
 import (
 	"bufio"
+	"io"
+	"io/fs"
 	"net"
 	"net/http"
 	"net/url"
-	"io"
-	"io/fs"
 	"time"
 )
 
-// HTTP is an interface for the functions in the net/http package 
+// HTTP is an interface for the functions in the net/http package
 type HTTP interface {
 	// ClientResponse constructors:
 	Get(string) (ClientResponse, error)
@@ -18,7 +18,6 @@ type HTTP interface {
 	Post(string, string, io.Reader) (ClientResponse, error)
 	PostForm(string, url.Values) (ClientResponse, error)
 	ReadResponse(*bufio.Reader, *http.Request) (ClientResponse, error)
-
 
 	CanonicalHeaderKey(string) string
 	DetectContentType([]byte) string
@@ -43,7 +42,7 @@ type HTTP interface {
 	StatusText(int) string
 }
 
-type httpFacade struct {}
+type httpFacade struct{}
 
 // NewHTTP creates a new HTTP instance.
 func NewHTTP() HTTP {
@@ -178,5 +177,3 @@ func (_ httpFacade) SetCookie(w ResponseWriter, cookie *Cookie) {
 func (_ httpFacade) StatusText(code int) string {
 	return http.StatusText(code)
 }
-
-

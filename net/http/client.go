@@ -42,6 +42,7 @@ func WithCookieJar(j CookieJar) ClientOption {
 		cl.Jar = j
 	}
 }
+
 // WithJar is just an alias to WithCookieJar
 var WithJar = WithCookieJar
 
@@ -115,5 +116,3 @@ func (c clientFacade) PostForm(url string, data url.Values) (ClientResponse, err
 
 	return newClientResponse(resp), nil
 }
-
-

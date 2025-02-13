@@ -58,7 +58,6 @@ func (r clientResponseFacade) Write(w io.Writer) error {
 	return r.realResponse.Write(w)
 }
 
-
 func (r clientResponseFacade) Status() string {
 	return r.realResponse.Status
 }
@@ -114,6 +113,3 @@ func (r clientResponseFacade) Request() ClientRequest {
 func (r clientResponseFacade) TLS() *tls.ConnectionState {
 	return r.realResponse.TLS
 }
-
-
-
