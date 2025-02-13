@@ -17,16 +17,26 @@ type processFacade struct {
 	realProcess *os.Process
 }
 
-func (_ osFacade) FindProcess(name string) (Process, error) {
-	return processFacade{
-		realProcess: os.FindProcess(name),
+func (_ osFacade) FindProcess(pid int) (Process, error) {
+	p, err := os.FindProcess(pid)
+	if err != nil {
+		return nil, err
 	}
+
+	return processFacade{
+		realProcess: p,
+	}, nil
 }
 
 func (_ osFacade) StartProcess(name string, argv []string, attr *ProcAttr) (Process, error) {
-	return processFacade{
-		realProcess: os.StartProcess(name, argv, attr),
+	p, err := os.StartProcess(name, argv, attr)
+	if err != nil {
+		return nil, err
 	}
+
+	return processFacade{
+		realProcess: p,
+	}, nil
 }
 
 func (p processFacade) PID() int {
