@@ -196,8 +196,3 @@ func (r clientRequestFacade) Write(w io.Writer) error {
 func (r clientRequestFacade) WriteProxy(w io.Writer) error {
 	return r.realRequest.WriteProxy(w)
 }
-
-
-
-
-

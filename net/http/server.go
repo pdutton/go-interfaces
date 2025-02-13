@@ -190,5 +190,3 @@ func (s serverFacade) SetKeepAlivesEnabled(v bool) {
 func (s serverFacade) Shutdown(ctx context.Context) error {
 	return s.realServer.Shutdown(ctx)
 }
-
-
