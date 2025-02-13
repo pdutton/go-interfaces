@@ -3,6 +3,7 @@ package os
 import (
 	"io"
 	"os"
+	"syscall"
 	"time"
 )
 
@@ -38,15 +39,25 @@ type fileFacade struct {
 }
 
 func (_ osFacade) Create(name string) (File, error) {
-	return fileFacade{
-		realFile: os.Create(name),
+	f, err := os.Create(name)
+	if err != nil {
+		return nil, err
 	}
+
+	return fileFacade{
+		realFile: f,
+	}, nil
 }
 
 func (_ osFacade) CreateTemp(dir string, pattern string) (File, error) {
-	return fileFacade{
-		realFile: os.CreateTemp(dir, pattern),
+	f, err := os.CreateTemp(dir, pattern)
+	if err != nil {
+		return nil, err
 	}
+
+	return fileFacade{
+		realFile: f,
+	}, nil
 }
 
 func (_ osFacade) NewFile(fd uintptr, name string) File {
@@ -56,21 +67,36 @@ func (_ osFacade) NewFile(fd uintptr, name string) File {
 }
 
 func (_ osFacade) Open(name string) (File, error) {
-	return fileFacade{
-		realFile: os.Open(name),
+	f, err := os.Open(name)
+	if err != nil {
+		return nil, err
 	}
+
+	return fileFacade{
+		realFile: f,
+	}, nil
 }
 
 func (_ osFacade) OpenFile(name string, flag int, perm FileMode) (File, error) {
-	return fileFacade{
-		realFile: os.OpenFile(name, flag, perm),
+	f, err := os.OpenFile(name, flag, perm)
+	if err != nil {
+		return nil, err
 	}
+
+	return fileFacade{
+		realFile: f,
+	}, nil
 }
 
 func (_ osFacade) OpenInRoot(dir string, name string) (File, error) {
-	return fileFacade{
-		realFile: os.OpenInRoot(dir, name),
+	f, err := os.OpenInRoot(dir, name)
+	if err != nil {
+		return nil, err
 	}
+
+	return fileFacade{
+		realFile: f,
+	}, nil
 }
 
 func (f fileFacade) Chdir() error {
@@ -78,7 +104,7 @@ func (f fileFacade) Chdir() error {
 }
 
 func (f fileFacade) Chmod(mode FileMode) error {
-	return f.realFile.chmod(mode)
+	return f.realFile.Chmod(mode)
 }
 
 func (f fileFacade) Chown(uid int, gid int) error {
@@ -130,7 +156,7 @@ func (f fileFacade) SetDeadline(t time.Time) error {
 }
 
 func (f fileFacade) SetReadDeadline(t time.Time) error {
-	return f.realFile.setReadDeadline(t)
+	return f.realFile.SetReadDeadline(t)
 }
 
 func (f fileFacade) SetWriteDeadline(t time.Time) error {

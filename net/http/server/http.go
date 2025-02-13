@@ -1,7 +1,6 @@
-package http
+package server
 
 import (
-	"bufio"
 	"io"
 	"io/fs"
 	"net"
@@ -11,14 +10,8 @@ import (
 )
 
 // HTTP is an interface for the functions in the net/http package
+// when used in a server
 type HTTP interface {
-	// ClientResponse constructors:
-	Get(string) (ClientResponse, error)
-	Head(string) (ClientResponse, error)
-	Post(string, string, io.Reader) (ClientResponse, error)
-	PostForm(string, url.Values) (ClientResponse, error)
-	ReadResponse(*bufio.Reader, *http.Request) (ClientResponse, error)
-
 	CanonicalHeaderKey(string) string
 	DetectContentType([]byte) string
 	Error(ResponseWriter, string, int)
@@ -47,51 +40,6 @@ type httpFacade struct{}
 // NewHTTP creates a new HTTP instance.
 func NewHTTP() HTTP {
 	return httpFacade{}
-}
-
-func (_ httpFacade) Get(url string) (ClientResponse, error) {
-	resp, err := http.Get(url)
-	if err != nil {
-		return nil, err
-	}
-
-	return newClientResponse(resp), nil
-}
-
-func (_ httpFacade) Head(url string) (ClientResponse, error) {
-	resp, err := http.Head(url)
-	if err != nil {
-		return nil, err
-	}
-
-	return newClientResponse(resp), nil
-}
-
-func (_ httpFacade) Post(url string, contentType string, body io.Reader) (ClientResponse, error) {
-	resp, err := http.Post(url, contentType, body)
-	if err != nil {
-		return nil, err
-	}
-
-	return newClientResponse(resp), nil
-}
-
-func (_ httpFacade) PostForm(url string, values url.Values) (ClientResponse, error) {
-	resp, err := http.PostForm(url, values)
-	if err != nil {
-		return nil, err
-	}
-
-	return newClientResponse(resp), nil
-}
-
-func (_ httpFacade) ReadResponse(r *bufio.Reader, req *http.Request) (ClientResponse, error) {
-	resp, err := http.ReadResponse(r, req)
-	if err != nil {
-		return nil, err
-	}
-
-	return newClientResponse(resp), nil
 }
 
 func (_ httpFacade) CanonicalHeaderKey(s string) string {

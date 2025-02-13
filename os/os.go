@@ -83,7 +83,7 @@ type OS interface {
 	Stat(string) (FileInfo, error)
 
 	// Process constructors
-	FindProcess(string) (Process, error)
+	FindProcess(int) (Process, error)
 	StartProcess(string, []string, *ProcAttr) (Process, error)
 
 	// Root constructors
@@ -252,8 +252,8 @@ func (_ osFacade) NewSyscallError(syscall string, err error) error {
 	return os.NewSyscallError(syscall, err)
 }
 
-func (_ osFacade) Pipe() (r, w File, err error) {
-	return os.Pipe(r, w, err)
+func (_ osFacade) Pipe() (File, File, error) {
+	return os.Pipe()
 }
 
 func (_ osFacade) ReadFile(name string) ([]byte, error) {
@@ -261,7 +261,7 @@ func (_ osFacade) ReadFile(name string) ([]byte, error) {
 }
 
 func (_ osFacade) Readlink(name string) (string, error) {
-	return os.ReadLink(name)
+	return os.Readlink(name)
 }
 
 func (_ osFacade) Remove(name string) error {
@@ -273,7 +273,7 @@ func (_ osFacade) RemoveAll(name string) error {
 }
 
 func (_ osFacade) Rename(oldpath, newpath string) error {
-	os.Rename(oldpath, newpath)
+	return os.Rename(oldpath, newpath)
 }
 
 func (_ osFacade) SameFile(fi1, fi2 FileInfo) bool {

@@ -1,4 +1,4 @@
-package http
+package server
 
 import (
 	"crypto/tls"
@@ -10,9 +10,9 @@ import (
 
 // TODO: Determine if mocking the server request is really useful.  If so, finish:
 
-// ServerRequest provides an interface to a net/http.Request for use on
+// Request provides an interface to a net/http.Request for use on
 // a server receiving an http request.
-type ServerRequest interface {
+type Request interface {
 	Method() string
 	URL() *url.URL
 	Proto() string

@@ -7,7 +7,7 @@ import (
 
 type Root interface {
 	Close() error
-	Create(string) error
+	Create(string) (File, error)
 	FS() fs.FS
 	Lstat(string) (FileInfo, error)
 	Mkdir(string, FileMode) error
@@ -20,7 +20,7 @@ type Root interface {
 }
 
 type rootFacade struct {
-	realRoot *http.Root
+	realRoot *os.Root
 }
 
 func (_ osFacade) OpenRoot(name string) (Root, error) {
@@ -38,8 +38,15 @@ func (r rootFacade) Close() error {
 	return r.realRoot.Close()
 }
 
-func (r rootFacade) Create(name string) error {
-	return r.realRoot.Create(name)
+func (r rootFacade) Create(name string) (File, error) {
+	f, err := r.realRoot.Create(name)
+	if err != nil {
+		return nil, err
+	}
+
+	return fileFacade{
+		realFile: f,
+	}, nil
 }
 
 func (r rootFacade) FS() fs.FS {

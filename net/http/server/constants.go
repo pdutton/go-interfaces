@@ -1,11 +1,11 @@
-package http
+package server
 
 import (
 	"net/http"
 )
 
-// This file contains references to constants (and "const" like variables) defined
-// in net/http
+// This file contains references to constants (and "const" like variables)
+// defined in net/http
 
 const (
 	MethodGet     = http.MethodGet

@@ -1,4 +1,4 @@
-package http
+package client
 
 import (
 	"io"
@@ -12,11 +12,11 @@ type CheckRedirectFn = func(*http.Request, []*http.Request) error
 // Client is an interface for the net/http.Client struct
 type Client interface {
 	CloseIdleConnections()
-	Do(*http.Request) (ClientResponse, error)
-	Get(string) (ClientResponse, error)
-	Head(string) (ClientResponse, error)
-	Post(string, string, io.Reader) (ClientResponse, error)
-	PostForm(string, url.Values) (ClientResponse, error)
+	Do(*http.Request) (Response, error)
+	Get(string) (Response, error)
+	Head(string) (Response, error)
+	Post(string, string, io.Reader) (Response, error)
+	PostForm(string, url.Values) (Response, error)
 }
 
 // ClientOption allows you to set options on a client in the NewClient constructor
@@ -72,47 +72,47 @@ func (c clientFacade) CloseIdleConnections() {
 	c.realClient.CloseIdleConnections()
 }
 
-func (c clientFacade) Do(req *http.Request) (ClientResponse, error) {
+func (c clientFacade) Do(req *http.Request) (Response, error) {
 	resp, err := c.realClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
 
-	return newClientResponse(resp), nil
+	return newResponse(resp), nil
 }
 
-func (c clientFacade) Get(url string) (ClientResponse, error) {
+func (c clientFacade) Get(url string) (Response, error) {
 	resp, err := c.realClient.Get(url)
 	if err != nil {
 		return nil, err
 	}
 
-	return newClientResponse(resp), nil
+	return newResponse(resp), nil
 }
 
-func (c clientFacade) Head(url string) (ClientResponse, error) {
+func (c clientFacade) Head(url string) (Response, error) {
 	resp, err := c.realClient.Head(url)
 	if err != nil {
 		return nil, err
 	}
 
-	return newClientResponse(resp), nil
+	return newResponse(resp), nil
 }
 
-func (c clientFacade) Post(url string, contentType string, body io.Reader) (ClientResponse, error) {
+func (c clientFacade) Post(url string, contentType string, body io.Reader) (Response, error) {
 	resp, err := c.realClient.Post(url, contentType, body)
 	if err != nil {
 		return nil, err
 	}
 
-	return newClientResponse(resp), nil
+	return newResponse(resp), nil
 }
 
-func (c clientFacade) PostForm(url string, data url.Values) (ClientResponse, error) {
+func (c clientFacade) PostForm(url string, data url.Values) (Response, error) {
 	resp, err := c.realClient.PostForm(url, data)
 	if err != nil {
 		return nil, err
 	}
 
-	return newClientResponse(resp), nil
+	return newResponse(resp), nil
 }
