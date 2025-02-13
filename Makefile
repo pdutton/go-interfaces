@@ -3,11 +3,12 @@
 GO?=go
 
 DIRS:=\
-	net/http
+  net/http \
+  os
 
-FILES:=$(foreach dir,$(DIRS),$(wildcard $(dir)/*.go))
+# FILES:=$(foreach dir,$(DIRS),$(wildcard $(dir)/*.go))
 
 .PHONY: fmt
 fmt:
-	$(GO) fmt $(FILES)
+	$(GO) fmt $(addprefix ./,$(DIRS))
 	
