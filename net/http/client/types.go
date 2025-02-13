@@ -13,11 +13,9 @@ type ConnState = http.ConnState
 type Cookie = http.Cookie
 type CookieJar = http.CookieJar
 
-// HTTP2Config is being added in 1.24.0.  When it's a little more baked, I'll add it here:
-// type HTTP2Config    = http.HTTP2Config
+type HTTP2Config = http.HTTP2Config
 type Header = http.Header
 
-// Protocols is being added in 1.24.0.  When it's a little more baked, I'll add it here:
-// type Protocols      = http.Protocols
+type Protocols = http.Protocols
 type RoundTripper = http.RoundTripper
 type SameSite = http.SameSite

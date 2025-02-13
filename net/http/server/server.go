@@ -124,25 +124,19 @@ func WithConnContext(f func(context.Context, net.Conn) context.Context) ServerOp
 	}
 }
 
-// This was added in go 1.24
-/*
 // Set the net/http.Server HTTP2
 func WithHTTP2(cfg *HTTP2Config) ServerOption {
 	return func(svr *http.Server) {
 		svr.HTTP2 = cfg
 	}
 }
-*/
 
-// This was added in go 1.24
-/*
 // Set the net/http.Server Protocols
 func WithProtocols(p *Protocols) ServerOption {
 	return func(svr *http.Server) {
 		svr.Protocols = p
 	}
 }
-*/
 
 type serverFacade struct {
 	realServer http.Server

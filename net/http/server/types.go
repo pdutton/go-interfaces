@@ -17,16 +17,14 @@ type File = http.File
 type FileSystem = http.FileSystem
 type Flusher = http.Flusher
 
-// HTTP2Config is being added in 1.24.0.  When it's a little more baked, I'll add it here:
-// type HTTP2Config    = http.HTTP2Config
+type HTTP2Config = http.HTTP2Config
 type Handler = http.Handler
 type HandlerFunc = http.HandlerFunc
 type Header = http.Header
 type Hijacker = http.Hijacker
 type MaxBytesError = http.MaxBytesError
 
-// Protocols is being added in 1.24.0.  When it's a little more baked, I'll add it here:
-// type Protocols      = http.Protocols
+type Protocols = http.Protocols
 type PushOptions = http.PushOptions
 type Pusher = http.Pusher
 type ResponseWriter = http.ResponseWriter
