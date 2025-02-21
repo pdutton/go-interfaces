@@ -14,9 +14,25 @@ type waitGroupFacade struct {
     realWaitGroup *sync.WaitGroup
 }
 
-func (_ syncFacade) NewWaitGroup() waitGroupFacade {
+// waitGroupOption allows you to set options on a wait group in the NewWaitGroup constructor
+type WaitGroupOption func(wg *sync.WaitGroup)
+
+// Create a wait group with the given initial count
+func WithCount(nbr uint8) WaitGroupOption {
+	return func(wg *sync.WaitGroup) {
+        wg.Add(int(nbr))
+	}
+}
+
+func (_ syncFacade) NewWaitGroup(options ...WaitGroupOption) waitGroupFacade {
+    var wg sync.WaitGroup
+
+   	for _, opt := range options {
+		opt(&wg)
+	}
+
     return waitGroupFacade{
-        realWaitGroup: &sync.WaitGroup{},
+        realWaitGroup: &wg,
     }
 }
 

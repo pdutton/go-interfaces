@@ -17,11 +17,11 @@ type Sync interface {
     // Constructors:
     NewCond(Locker) Cond
     NewMap() Map
-    NewMutex() Mutex
+    NewMutex(...MutexOption) Mutex
     NewOnce() Once
-    NewPool(func() any) Pool
-    NewRWMutex() RWMutex
-    NewWaitGroup() WaitGroup
+    NewPool(...PoolOption) Pool
+    NewRWMutex(...RWMutexOption) RWMutex
+    NewWaitGroup(...WaitGroupOption) WaitGroup
 }
 
 type syncFacade struct {

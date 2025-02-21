@@ -18,9 +18,32 @@ type rwMutexFacade struct {
     realRWMutex *sync.RWMutex
 }
 
-func (_ syncFacade) NewRWMutex() rwMutexFacade {
-    return rwMutexFacade{
-        realRWMutex: &sync.RWMutex{},
+// RWMutexOption allows you to set options on a rw mutex in the NewRWMutex constructor
+type RWMutexOption func(mut *sync.RWMutex)
+
+// Create a read locked RWMutex
+func WithRLocked() RWMutexOption {
+	return func(mut *sync.RWMutex) {
+        mut.RLock()
+	}
+}
+
+// Create a write locked RWMutex
+func WithWLocked() RWMutexOption {
+	return func(mut *sync.RWMutex) {
+        mut.Lock()
+	}
+}
+
+func (_ syncFacade) NewRWMutex(options ...RWMutexOption) rwMutexFacade {
+    var mut sync.RWMutex
+
+	for _, opt := range options {
+		opt(&mut)
+	}
+
+    return rwMutexFacade {
+        realRWMutex: &mut,
     }
 }
 

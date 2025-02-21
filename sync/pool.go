@@ -13,9 +13,25 @@ type poolFacade struct {
     realPool *sync.Pool
 }
 
-func (_ syncFacade) NewPool(newfn func() any) poolFacade {
+// PoolOption allows you to set options on a pool in the NewPool constructor
+type PoolOption func(pool *sync.Pool)
+
+// Create a pool with a given New function
+func WithNew(f func() any) PoolOption {
+	return func(pool *sync.Pool) {
+        pool.New = f
+	}
+}
+
+func (_ syncFacade) NewPool(options ...PoolOption) poolFacade {
+    var pool sync.Pool
+
+	for _, opt := range options {
+		opt(&pool)
+	}
+    
     return poolFacade{
-        realPool: &sync.Pool{ New: newfn },
+        realPool: &pool,
     }
 }
 

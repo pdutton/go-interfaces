@@ -14,9 +14,25 @@ type mutexFacade struct {
     realMutex *sync.Mutex
 }
 
-func (_ syncFacade) NewMutex() mutexFacade {
-    return mutexFacade{
-        realMutex: &sync.Mutex{},
+// MutexOption allows you to set options on a mutex in the NewMutex constructor
+type MutexOption func(mut *sync.Mutex)
+
+// Create a locked Mutex
+func WithLocked() MutexOption {
+	return func(mut *sync.Mutex) {
+        mut.Lock()
+	}
+}
+
+func (_ syncFacade) NewMutex(options ...MutexOption) mutexFacade {
+    var mut sync.Mutex
+
+	for _, opt := range options {
+		opt(&mut)
+	}
+
+    return mutexFacade {
+        realMutex: &mut,
     }
 }
 
