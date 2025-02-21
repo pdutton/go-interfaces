@@ -21,14 +21,14 @@ func (_ syncFacade) NewCond(l Locker) Cond {
 }
 
 func (c condFacade) Broadcast() {
-    return c.realCond.Broadcast()
+    c.realCond.Broadcast()
 }
 
 func (c condFacade) Signal() {
-    return c.realCond.Signal()
+    c.realCond.Signal()
 }
 
 func (c condFacade) Wait() {
-    return c.realCond.Wait()
+    c.realCond.Wait()
 }
 

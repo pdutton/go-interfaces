@@ -14,7 +14,7 @@ type mutexFacade struct {
     realMutex *sync.Mutex
 }
 
-func (_ Sync) NewMutex() mutexFacade {
+func (_ syncFacade) NewMutex() mutexFacade {
     return mutexFacade{
         realMutex: &sync.Mutex{},
     }

@@ -13,9 +13,9 @@ type poolFacade struct {
     realPool *sync.Pool
 }
 
-func (_ Sync) NewPool(new f() any) poolFacade {
+func (_ syncFacade) NewPool(newfn func() any) poolFacade {
     return poolFacade{
-        realPool: sync.Pool{ New: new },
+        realPool: &sync.Pool{ New: newfn },
     }
 }
 

@@ -18,7 +18,7 @@ type rwMutexFacade struct {
     realRWMutex *sync.RWMutex
 }
 
-func (_ Sync) NewRWMutex() rwMutexFacade {
+func (_ syncFacade) NewRWMutex() rwMutexFacade {
     return rwMutexFacade{
         realRWMutex: &sync.RWMutex{},
     }

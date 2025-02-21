@@ -12,7 +12,7 @@ type onceFacade struct {
     realOnce *sync.Once
 }
 
-func (_ Sync) NewOnce() onceFacade {
+func (_ syncFacade) NewOnce() onceFacade {
     return onceFacade{
         realOnce: &sync.Once{},
     }

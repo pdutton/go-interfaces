@@ -14,14 +14,14 @@ type waitGroupFacade struct {
     realWaitGroup *sync.WaitGroup
 }
 
-func (_ Sync) NewWaitGroup() waitGroupFacade {
+func (_ syncFacade) NewWaitGroup() waitGroupFacade {
     return waitGroupFacade{
         realWaitGroup: &sync.WaitGroup{},
     }
 }
 
 func (wg waitGroupFacade) Add(delta int) {
-    return wg.realWaitGroup.Add(delta)
+    wg.realWaitGroup.Add(delta)
 }
 
 func (wg waitGroupFacade) Done() {

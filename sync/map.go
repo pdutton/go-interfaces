@@ -10,7 +10,7 @@ type Map interface {
     CompareAndSwap(any, any, any) bool
     Delete(any)
     Load(any) (any, bool)
-    LoadAndDelete(any) any, bool)
+    LoadAndDelete(any) (any, bool)
     LoadOrStore(any, any) (any, bool)
     Range(func(any, any) bool)
     Store(any, any)
@@ -21,7 +21,7 @@ type mapFacade struct {
     realMap *sync.Map
 }
 
-func (_ Sync) NewMap() Map {
+func (_ syncFacade) NewMap() Map {
     return mapFacade{
         realMap: &sync.Map{},
     }
@@ -40,14 +40,14 @@ func (m mapFacade) CompareAndSwap(key, old, new any) bool {
 }
 
 func (m mapFacade) Delete(key any) {
-    return m.realMap.Delete(key)
+    m.realMap.Delete(key)
 }
 
 func (m mapFacade) Load(key any) (any, bool) {
     return m.Load(key)
 }
 
-func (m mapFacade) LoadAndDelete(key any) any, bool) {
+func (m mapFacade) LoadAndDelete(key any) (any, bool) {
     return m.LoadAndDelete(key)
 }
 
@@ -56,11 +56,11 @@ func (m mapFacade) LoadOrStore(key, value any) (any, bool) {
 }
 
 func (m mapFacade) Range(f func(any, any) bool) {
-    return m.Range(f)
+    m.Range(f)
 }
 
 func (m mapFacade) Store(key, value any) {
-    return m.Store(key, value)
+    m.Store(key, value)
 }
 
 func (m mapFacade) Swap(key, value any) (any, bool) {
