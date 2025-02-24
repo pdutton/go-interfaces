@@ -3,6 +3,7 @@
 GO?=go
 
 DIRS:=\
+  io \
   net/http/client \
   net/http/server \
   os
