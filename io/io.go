@@ -57,3 +57,35 @@ func (_ ioFacade) TeeReader(r Reader, w Writer) Reader {
 func (_ ioFacade) MultiWriter(writers ...Writer) Writer {
 	return io.MultiWriter(writers...)
 }
+
+func (_ ioFacade) Copy(w Writer, r Reader) (int64, error) {
+	return io.Copy(w, r)
+}
+
+func (_ ioFacade) CopyBuffer(w Writer, r Reader, buf []byte) (int64, error) {
+	return io.CopyBuffer(w, r, buf)
+}
+
+func (_ ioFacade) CopyN(w Writer, r Reader, nbr int64) (int64, error) {
+	return io.CopyN(w, r, nbr)
+}
+
+func (_ ioFacade) Pipe() (PipeReader, PipeWriter) {
+	return io.Pipe()
+}
+
+func (_ ioFacade) ReadAll(r Reader) ([]byte, error) {
+	return io.ReadAll(r)
+}
+
+func (_ ioFacade) ReadAtLeast(r Reader, buf []byte, min int) (int, error) {
+	return io.ReadAtLeast(r, buf, min)
+}
+
+func (_ ioFacade) ReadFull(r Reader, buf []byte) (int, error) {
+	return io.ReadFull(r, buf)
+}
+
+func (_ ioFacade) WriteString(w Writer, str string) (int, error) {
+	return io.WriteString(w, str)
+}
