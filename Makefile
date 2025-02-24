@@ -6,7 +6,9 @@ DIRS:=\
   io \
   net/http/client \
   net/http/server \
-  os
+  os \
+  path \
+  path\filepath
 
 # FILES:=$(foreach dir,$(DIRS),$(wildcard $(dir)/*.go))
 
