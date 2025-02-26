@@ -7,6 +7,7 @@ DIRS:=\
   net/http/client \
   net/http/server \
   os \
+  os/exec \
   path \
   path\filepath
 
