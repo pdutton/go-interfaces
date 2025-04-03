@@ -44,7 +44,7 @@ type resolverFacade struct {
 	resolver *net.Resolver
 }
 
-func NewResolver(options ...ResolverOption) resolverFacade {
+func (_ netFacade) NewResolver(options ...ResolverOption) Resolver {
 	var realResolver net.Resolver
 
 	for _, opt := range options {

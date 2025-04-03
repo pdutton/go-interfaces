@@ -10,7 +10,7 @@ DIRS:=\
   os \
   os/exec \
   path \
-  path\filepath
+  path/filepath
 
 # FILES:=$(foreach dir,$(DIRS),$(wildcard $(dir)/*.go))
 

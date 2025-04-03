@@ -54,6 +54,10 @@ type Net interface {
 	DialUnix(network string, laddr, raddr *UnixAddr) (UnixConn, error)
 	ListenUnixgram(network string, laddr *UnixAddr) (UnixConn, error)
 	ListenUnix(network string, laddr *UnixAddr) (UnixListener, error)
+
+    NewDialer(options ...DialerOption) Dialer
+    NewListenConfig(options ...ListenConfigOption) ListenConfig
+    NewResolver(options ...ResolverOption) Resolver
 }
 
 type netFacade struct {
