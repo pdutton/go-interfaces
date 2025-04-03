@@ -7,7 +7,10 @@ DIRS:=\
   net \
   net/http/client \
   net/http/server \
-  os
+  os \
+  os/exec \
+  path \
+  path\filepath
 
 # FILES:=$(foreach dir,$(DIRS),$(wildcard $(dir)/*.go))
 
