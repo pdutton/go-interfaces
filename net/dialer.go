@@ -92,7 +92,7 @@ func WithSetMultipathTCP(b bool) DialerOption {
 	}
 }
 
-func NewDialer(options ...DialerOption) dialerFacade {
+func (_ netFacade) NewDialer(options ...DialerOption) Dialer {
 	var dialer net.Dialer
 
 	for _, opt := range options {

@@ -38,7 +38,7 @@ type listenConfigFacade struct {
 	listenConfig *net.ListenConfig
 }
 
-func NewListenConfig(options ...ListenConfigOption) ListenConfig {
+func (_ netFacade) NewListenConfig(options ...ListenConfigOption) ListenConfig {
 	var lc net.ListenConfig
 
 	for _, opt := range options {
