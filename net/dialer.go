@@ -70,7 +70,7 @@ func WithCancel(c <-chan struct{}) DialerOption {
 
 func WithResolver(r Resolver) DialerOption {
 	return func(dia *net.Dialer) {
-	    dia.Resolver = r.getUnderlyingResolver()
+	    dia.Resolver = r.GetUnderlyingResolver()
 	}
 }
 

@@ -19,7 +19,7 @@ type Resolver interface {
 	LookupSRV(ctx context.Context, service, port, name string) (string, []*SRV, error)
 	LookupTXT(ctx context.Context, name string) ([]string, error)
 
-    getUnderlyingResolver() *net.Resolver
+    GetUnderlyingResolver() *net.Resolver
 }
 
 type ResolverOption func(res *net.Resolver)
@@ -60,7 +60,7 @@ func wrapResolver(res *net.Resolver) Resolver {
 	return resolverFacade{ resolver: res }
 }
 
-func (r resolverFacade) getUnderlyingResolver() *net.Resolver {
+func (r resolverFacade) GetUnderlyingResolver() *net.Resolver {
     return r.resolver
 }
 
