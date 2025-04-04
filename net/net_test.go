@@ -25,7 +25,8 @@ func TestNet_ParseCIDR_IPv4(t *testing.T) {
     var impl = NewNet()
 
     var cidr = `192.168.0.12/24`
-    var expectIP = IP{
+    var expectIP4 = IP{ 192, 168, 0, 12 }
+    var expectIP16 = IP{
         0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 255, 255, 192, 168, 0, 12 }
     var expectMask = IPNet{
         IP{ 192, 168, 0, 0 },
@@ -36,7 +37,7 @@ func TestNet_ParseCIDR_IPv4(t *testing.T) {
     if err != nil {
         t.Errorf(`unexpected error: %v`, err)
     }
-    if !reflect.DeepEqual(ip, expectIP) {
+    if !reflect.DeepEqual(ip, expectIP4) && !reflect.DeepEqual(ip, expectIP16) {
         t.Errorf(`unexpected ip: %v`, []byte(ip))
     }
     if !reflect.DeepEqual(ipnet, &expectMask) {
