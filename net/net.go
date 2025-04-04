@@ -57,7 +57,7 @@ type Net interface {
 
     NewDialer(options ...DialerOption) Dialer
     NewListenConfig(options ...ListenConfigOption) ListenConfig
-    NewResolver(options ...ResolverOption) Resolver
+    NewResolver(options ...ResolverOption) resolverFacade
 }
 
 type netFacade struct {
