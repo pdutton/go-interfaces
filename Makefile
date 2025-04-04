@@ -10,15 +10,20 @@ DIRS:=\
   os \
   os/exec \
   path \
-  path/filepath
+  path/filepath \
+  sync
 
 # FILES:=$(foreach dir,$(DIRS),$(wildcard $(dir)/*.go))
 
 .PHONY: test
 test:
-	$(GO) test $(addprefix ./,$(DIRS))
+	$(GO) test './...'
+
+# $(GO) test $(addprefix ./,$(DIRS))
 
 .PHONY: fmt
 fmt:
-	$(GO) fmt $(addprefix ./,$(DIRS))
+	$(GO) fmt ./...
+
+# $(GO) fmt $(addprefix ./,$(DIRS))
 	
