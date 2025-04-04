@@ -18,6 +18,8 @@ type Resolver interface {
 	LookupPort(ctx context.Context, network, service string) (port int, err error)
 	LookupSRV(ctx context.Context, service, port, name string) (string, []*SRV, error)
 	LookupTXT(ctx context.Context, name string) ([]string, error)
+
+    getUnderlyingResolver() *net.Resolver
 }
 
 type ResolverOption func(res *net.Resolver)
@@ -44,7 +46,7 @@ type resolverFacade struct {
 	resolver *net.Resolver
 }
 
-func (_ netFacade) NewResolver(options ...ResolverOption) resolverFacade {
+func (_ netFacade) NewResolver(options ...ResolverOption) Resolver {
 	var realResolver net.Resolver
 
 	for _, opt := range options {
@@ -56,6 +58,10 @@ func (_ netFacade) NewResolver(options ...ResolverOption) resolverFacade {
 
 func wrapResolver(res *net.Resolver) Resolver {
 	return resolverFacade{ resolver: res }
+}
+
+func (r resolverFacade) getUnderlyingResolver() *net.Resolver {
+    return r.resolver
 }
 
 func (r resolverFacade) LookupAddr(ctx context.Context, addr string) ([]string, error) {

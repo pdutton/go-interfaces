@@ -222,7 +222,7 @@ func TestNewDialer_WithAll(t *testing.T) {
     if !reflect.DeepEqual(dia.KeepAliveConfig, keepAliveConfig) {
         t.Errorf(`unexpected keep-alive: %+v`, dia.KeepAliveConfig)
     }
-    if dia.Resolver != resolver.resolver {
+    if dia.Resolver != resolver.getUnderlyingResolver() {
         t.Errorf(`unexpected resolver: %+v`, dia.Resolver)
     }
     if dia.Cancel != cancel {

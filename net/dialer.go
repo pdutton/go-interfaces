@@ -68,9 +68,9 @@ func WithCancel(c <-chan struct{}) DialerOption {
 	}
 }
 
-func WithResolver(r resolverFacade) DialerOption {
+func WithResolver(r Resolver) DialerOption {
 	return func(dia *net.Dialer) {
-		dia.Resolver = r.resolver
+	    dia.Resolver = r.getUnderlyingResolver()
 	}
 }
 
