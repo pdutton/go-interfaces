@@ -11,7 +11,7 @@ const (
     ModeAppend     = fs.ModeAppend
     ModeExclusive  = fs.ModeExclusive
     ModeTemporary  = fs.ModeTemporary
-    ModeSymlink    = fs.ModeTemporary
+    ModeSymlink    = fs.ModeSymlink
     ModeDevice     = fs.ModeDevice
     ModeNamedPipe  = fs.ModeNamedPipe
     ModeSocket     = fs.ModeSocket
