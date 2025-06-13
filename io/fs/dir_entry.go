@@ -18,10 +18,20 @@ type dirEntryFacade struct {
     realDirEntry fs.DirEntry
 }
 
-func newDirEntry(de fs.DirEntry) dirEntryFacade {
+func NewDirEntry(de fs.DirEntry) dirEntryFacade {
     return dirEntryFacade{
         realDirEntry: de,
     }
+}
+
+func ToDirEntryList(in []fs.DirEntry) []DirEntry {
+	var dea = []DirEntry{}
+
+	for _, de := range in {
+		dea = append(dea, NewDirEntry(de))
+	}
+
+	return dea
 }
 
 func (_ fileSystemFacade) FileInfoToDirEntry(info FileInfo) DirEntry {
