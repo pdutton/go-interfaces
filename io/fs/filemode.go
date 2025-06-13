@@ -57,7 +57,7 @@ func newFileMode(fm fs.FileMode) fileModeFacade {
 }
 
 func (fm fileModeFacade) IsRegular() bool {
-	return uint32(fm.realFileMode.Type()) & uint32(ModePerm) == 0
+	return fm.realFileMode.IsRegular()
 }
 
 func (fm fileModeFacade) IsDir() bool {
