@@ -50,7 +50,7 @@ type fileModeFacade struct {
     realFileMode fs.FileMode
 }
 
-func newFileMode(fm fs.FileMode) fileModeFacade {
+func NewFileMode(fm fs.FileMode) fileModeFacade {
     return fileModeFacade{
         realFileMode: fm,
     }
@@ -113,7 +113,7 @@ func (fm fileModeFacade) IsIrregular() bool {
 }
 
 func (fm fileModeFacade) Perm() FileMode {
-    return newFileMode(fm.realFileMode.Perm())
+    return NewFileMode(fm.realFileMode.Perm())
 }
 
 func (fm fileModeFacade) String() string {
@@ -121,6 +121,6 @@ func (fm fileModeFacade) String() string {
 }
 
 func (fm fileModeFacade) Type() FileMode {
-    return newFileMode(fm.realFileMode.Type())
+    return NewFileMode(fm.realFileMode.Type())
 }
 
