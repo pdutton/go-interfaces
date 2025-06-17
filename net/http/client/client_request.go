@@ -15,6 +15,8 @@ type Request interface {
 	Write(io.Writer) error
 	WriteProxy(io.Writer) error
 
+	RealRequest() *http.Request
+
 	// Is Clone useful?
 	// Clone(context.Context) *Request
 
@@ -167,6 +169,10 @@ func NewRequestWithContext(ctx context.Context, method, url string, body io.Read
 	facade.setOptions(options...)
 
 	return facade, nil
+}
+
+func (f requestFacade) RealRequest() *http.Request {
+	return f.realRequest
 }
 
 func (f requestFacade) setOptions(options ...RequestOption) {
