@@ -2,7 +2,6 @@ package os
 
 import (
 	"io"
-	rfs "io/fs"
 	"os"
 	"syscall"
 	"time"
@@ -12,7 +11,7 @@ import (
 
 type File interface {
 	Chdir() error
-	Chmod(rfs.FileMode) error
+	Chmod(FSFileMode) error
 	Chown(int, int) error
 	Close() error
 	Fd() uintptr
@@ -88,7 +87,7 @@ func (_ osFacade) Open(name string) (File, error) {
 	}, nil
 }
 
-func (_ osFacade) OpenFile(name string, flag int, perm rfs.FileMode) (File, error) {
+func (_ osFacade) OpenFile(name string, flag int, perm FSFileMode) (File, error) {
 	f, err := os.OpenFile(name, flag, perm)
 	if err != nil {
 		return nil, err
@@ -118,7 +117,7 @@ func (f fileFacade) Chdir() error {
 	return f.nub.Chdir()
 }
 
-func (f fileFacade) Chmod(mode rfs.FileMode) error {
+func (f fileFacade) Chmod(mode FSFileMode) error {
 	return f.nub.Chmod(mode)
 }
 

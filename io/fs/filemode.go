@@ -9,7 +9,7 @@ var (
 	// the FileMode interface has Is* methods, but they could
 	// come in handy in unit testing so I will maintain them.
 
-	ModeFile = NewFileMode(fs.FileMode(0))
+	ModeFile = NewFileMode(FSFileMode(0))
 
 	ModeDir        = NewFileMode(fs.ModeDir)
 	ModeAppend     = NewFileMode(fs.ModeAppend)
@@ -45,24 +45,24 @@ type FileMode interface {
     IsSticky() bool
     IsIrregular() bool
     
-    Perm() fs.FileMode
+    Perm() FSFileMode
     String() string
 
     // Nub retrieves the underlying implementation
-    Nub() fs.FileMode
+    Nub() FSFileMode
 }
 
 type fileModeFacade struct {
-    nub fs.FileMode
+    nub FSFileMode
 }
 
-func NewFileMode(fm fs.FileMode) fileModeFacade {
+func NewFileMode(fm FSFileMode) fileModeFacade {
     return fileModeFacade{
         nub: fm,
     }
 }
 
-func (fm fileModeFacade) Nub() fs.FileMode {
+func (fm fileModeFacade) Nub() FSFileMode {
 	return fm.nub
 }
 
@@ -122,7 +122,7 @@ func (fm fileModeFacade) IsIrregular() bool {
 	return uint32(fm.nub.Type()) & uint32(fs.ModeIrregular) != 0
 }
 
-func (fm fileModeFacade) Perm() fs.FileMode {
+func (fm fileModeFacade) Perm() FSFileMode {
     return fm.nub.Perm()
 }
 

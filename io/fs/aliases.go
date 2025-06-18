@@ -4,6 +4,10 @@ import (
     "io/fs"
 )
 
+// FSFileMode is al alias for the io/fs/FileMode type, which is
+// really just an int, so octal values can be used.
+type FSFileMode  = fs.FileMode
+
 type FS          = fs.FS
 type File        = fs.File
 type GlobFS      = fs.GlobFS

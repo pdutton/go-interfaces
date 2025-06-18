@@ -11,10 +11,10 @@ type Root interface {
 	Create(string) (File, error)
 	FS() fs.FS
 	Lstat(string) (FileInfo, error)
-	Mkdir(string, FileMode) error
+	Mkdir(string, FSFileMode) error
 	Name() string
 	Open(string) (File, error)
-	OpenFile(string, int, FileMode) (File, error)
+	OpenFile(string, int, FSFileMode) (File, error)
 	OpenRoot(string) (Root, error)
 	Remove(string) error
 	Stat(string) (FileInfo, error)
@@ -63,8 +63,8 @@ func (r rootFacade) Lstat(name string) (FileInfo, error) {
 	return fs.NewFileInfo(fi), err
 }
 
-func (r rootFacade) Mkdir(name string, perm FileMode) error {
-	return r.nub.Mkdir(name, perm.Nub())
+func (r rootFacade) Mkdir(name string, perm FSFileMode) error {
+	return r.nub.Mkdir(name, perm)
 }
 
 func (r rootFacade) Name() string {
@@ -80,8 +80,8 @@ func (r rootFacade) Open(name string) (File, error) {
 	return WrapFile(f), nil
 }
 
-func (r rootFacade) OpenFile(name string, flag int, perm FileMode) (File, error) {
-	f, err := r.nub.OpenFile(name, flag, perm.Nub())
+func (r rootFacade) OpenFile(name string, flag int, perm FSFileMode) (File, error) {
+	f, err := r.nub.OpenFile(name, flag, perm)
 	if err != nil {
 		return nil, err
 	}
