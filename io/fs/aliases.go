@@ -6,7 +6,6 @@ import (
 
 type FS          = fs.FS
 type File        = fs.File
-type FileInfo    = fs.FileInfo
 type GlobFS      = fs.GlobFS
 type PathError   = fs.PathError
 type ReadDirFS   = fs.ReadDirFS

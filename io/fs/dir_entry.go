@@ -8,8 +8,8 @@ type DirEntry interface {
     // Access to members variables:
     Name() string
     IsDir() bool
-    Type() fs.FileMode
-    Info() (fs.FileInfo, error)
+    Type() FileMode
+    Info() (FileInfo, error)
 
     // Return the underlying direntry instance
     Nub() fs.DirEntry
@@ -27,7 +27,7 @@ func NewDirEntry(de fs.DirEntry) dirEntryFacade {
     }
 }
 
-func ToDirEntryList(in []fs.DirEntry) []DirEntry {
+func NewDirEntryList(in []fs.DirEntry) []DirEntry {
 	var dea = []DirEntry{}
 
 	for _, de := range in {
@@ -39,7 +39,7 @@ func ToDirEntryList(in []fs.DirEntry) []DirEntry {
 
 func (_ fileSystemFacade) FileInfoToDirEntry(info FileInfo) DirEntry {
     return dirEntryFacade{
-        nub: fs.FileInfoToDirEntry(info),
+        nub: fs.FileInfoToDirEntry(info.Nub()),
     }
 }
 
@@ -69,12 +69,13 @@ func (de dirEntryFacade) IsDir() bool {
     return de.nub.IsDir()
 }
 
-func (de dirEntryFacade) Type() fs.FileMode {
-    return de.nub.Type()
+func (de dirEntryFacade) Type() FileMode {
+    return NewFileMode(de.nub.Type())
 }
 
-func (de dirEntryFacade) Info() (fs.FileInfo, error) {
-    return de.nub.Info()
+func (de dirEntryFacade) Info() (FileInfo, error) {
+	inf, err := de.nub.Info()
+	return NewFileInfo(inf), err
 }
 
 func (de dirEntryFacade) format() string {

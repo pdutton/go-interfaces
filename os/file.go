@@ -147,7 +147,7 @@ func (f fileFacade) ReadAt(b []byte, offset int64) (int, error) {
 
 func (f fileFacade) ReadDir(n int) ([]DirEntry, error) {
 	dea, err := f.nub.ReadDir(n)
-	return fs.ToDirEntryList(dea), err
+	return fs.NewDirEntryList(dea), err
 }
 
 func (f fileFacade) ReadFrom(r io.Reader) (int64, error) {
@@ -155,7 +155,8 @@ func (f fileFacade) ReadFrom(r io.Reader) (int64, error) {
 }
 
 func (f fileFacade) Readdir(n int) ([]FileInfo, error) {
-	return f.nub.Readdir(n)
+	fil, err := f.nub.Readdir(n)
+	return fs.NewFileInfoList(fil), err
 }
 
 func (f fileFacade) Readdirnames(n int) ([]string, error) {
@@ -179,7 +180,8 @@ func (f fileFacade) SetWriteDeadline(t time.Time) error {
 }
 
 func (f fileFacade) Stat() (FileInfo, error) {
-	return f.nub.Stat()
+	fi, err := f.nub.Stat()
+	return fs.NewFileInfo(fi), err
 }
 
 func (f fileFacade) Sync() error {

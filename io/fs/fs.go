@@ -37,7 +37,7 @@ func (_ fileSystemFacade) FormatDirEntry(dir DirEntry) string {
 }
 
 func (_ fileSystemFacade) FormatFileInfo(info FileInfo) string {
-    return fs.FormatFileInfo(info)
+    return fs.FormatFileInfo(info.Nub())
 }
 
 func (_ fileSystemFacade) Glob(fsys FS, pattern string) ([]string, error) {
@@ -61,5 +61,6 @@ func (_ fileSystemFacade) Sub(fsys FS, name string) (FS, error) {
 }
 
 func (_ fileSystemFacade) Stat(fsys FS, name string) (FileInfo, error) {
-    return fs.Stat(fsys, name)
+	inf, err := fs.Stat(fsys, name)
+	return NewFileInfo(inf), err
 }

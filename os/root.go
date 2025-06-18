@@ -59,7 +59,8 @@ func (r rootFacade) FS() fs.FS {
 }
 
 func (r rootFacade) Lstat(name string) (FileInfo, error) {
-	return r.nub.Lstat(name)
+	fi, err := r.nub.Lstat(name)
+	return fs.NewFileInfo(fi), err
 }
 
 func (r rootFacade) Mkdir(name string, perm FileMode) error {
@@ -104,5 +105,6 @@ func (r rootFacade) Remove(name string) error {
 }
 
 func (r rootFacade) Stat(name string) (FileInfo, error) {
-	return r.nub.Stat(name)
+	fi, err := r.nub.Stat(name)
+	return fs.NewFileInfo(fi), err
 }

@@ -279,7 +279,7 @@ func (_ osFacade) Rename(oldpath, newpath string) error {
 }
 
 func (_ osFacade) SameFile(fi1, fi2 FileInfo) bool {
-	return os.SameFile(fi1, fi2)
+	return os.SameFile(fi1.Nub(), fi2.Nub())
 }
 
 func (_ osFacade) Setenv(key, value string) error {
@@ -320,13 +320,15 @@ func (_ osFacade) WriteFile(name string, data []byte, perm FileMode) error {
 
 func (_ osFacade) ReadDir(name string) ([]DirEntry, error) {
 	dea, err := os.ReadDir(name)
-	return fs.ToDirEntryList(dea), err
+	return fs.NewDirEntryList(dea), err
 }
 
 func (_ osFacade) Lstat(name string) (FileInfo, error) {
-	return os.Lstat(name)
+	fi, err := os.Lstat(name)
+	return fs.NewFileInfo(fi), err
 }
 
 func (_ osFacade) Stat(name string) (FileInfo, error) {
-	return os.Stat(name)
+	fi, err := os.Stat(name)
+	return fs.NewFileInfo(fi), err
 }
