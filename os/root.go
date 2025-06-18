@@ -1,8 +1,9 @@
 package os
 
 import (
-	"io/fs"
 	"os"
+
+	"github.com/pdutton/go-interfaces/io/fs"
 )
 
 type Root interface {
@@ -17,10 +18,12 @@ type Root interface {
 	OpenRoot(string) (Root, error)
 	Remove(string) error
 	Stat(string) (FileInfo, error)
+
+	Nub() *os.Root
 }
 
 type rootFacade struct {
-	realRoot *os.Root
+	nub *os.Root
 }
 
 func (_ osFacade) OpenRoot(name string) (Root, error) {
@@ -30,71 +33,76 @@ func (_ osFacade) OpenRoot(name string) (Root, error) {
 	}
 
 	return rootFacade{
-		realRoot: r,
+		nub: r,
 	}, nil
+}
+
+func (r rootFacade) Nub() *os.Root {
+	return r.nub
 }
 
 func (r rootFacade) Close() error {
-	return r.realRoot.Close()
+	return r.nub.Close()
 }
 
 func (r rootFacade) Create(name string) (File, error) {
-	f, err := r.realRoot.Create(name)
+	f, err := r.nub.Create(name)
 	if err != nil {
 		return nil, err
 	}
 
-	return fileFacade{
-		realFile: f,
-	}, nil
+	return WrapFile(f), nil
 }
 
 func (r rootFacade) FS() fs.FS {
-	return r.realRoot.FS()
+	return r.nub.FS()
 }
 
 func (r rootFacade) Lstat(name string) (FileInfo, error) {
-	return r.realRoot.Lstat(name)
+	return r.nub.Lstat(name)
 }
 
 func (r rootFacade) Mkdir(name string, perm FileMode) error {
-	return r.realRoot.Mkdir(name, perm)
+	return r.nub.Mkdir(name, perm.Nub())
 }
 
 func (r rootFacade) Name() string {
-	return r.realRoot.Name()
+	return r.nub.Name()
 }
 
 func (r rootFacade) Open(name string) (File, error) {
-	f, err := r.realRoot.Open(name)
+	f, err := r.nub.Open(name)
 	if err != nil {
 		return nil, err
 	}
 
-	return fileFacade{
-		realFile: f,
-	}, nil
+	return WrapFile(f), nil
 }
 
 func (r rootFacade) OpenFile(name string, flag int, perm FileMode) (File, error) {
-	return r.realRoot.OpenFile(name, flag, perm)
+	f, err := r.nub.OpenFile(name, flag, perm.Nub())
+	if err != nil {
+		return nil, err
+	}
+
+	return WrapFile(f), nil
 }
 
 func (r rootFacade) OpenRoot(name string) (Root, error) {
-	r2, err := r.realRoot.OpenRoot(name)
+	r2, err := r.nub.OpenRoot(name)
 	if err != nil {
 		return nil, err
 	}
 
 	return rootFacade{
-		realRoot: r2,
+		nub: r2,
 	}, nil
 }
 
 func (r rootFacade) Remove(name string) error {
-	return r.realRoot.Remove(name)
+	return r.nub.Remove(name)
 }
 
 func (r rootFacade) Stat(name string) (FileInfo, error) {
-	return r.realRoot.Stat(name)
+	return r.nub.Stat(name)
 }

@@ -5,6 +5,8 @@ import (
 	"os"
 	"syscall"
 	"time"
+
+	"github.com/pdutton/go-interfaces/io/fs"
 )
 
 type File interface {
@@ -35,7 +37,15 @@ type File interface {
 }
 
 type fileFacade struct {
-	realFile *os.File
+	nub *os.File
+}
+
+// This is a basic constructor, but I didn't want to name it New*
+// because that might imply that it actually creates a file.
+func WrapFile(f *os.File) fileFacade {
+	return fileFacade{
+		nub: f,
+	}
 }
 
 func (_ osFacade) Create(name string) (File, error) {
@@ -45,7 +55,7 @@ func (_ osFacade) Create(name string) (File, error) {
 	}
 
 	return fileFacade{
-		realFile: f,
+		nub: f,
 	}, nil
 }
 
@@ -56,13 +66,13 @@ func (_ osFacade) CreateTemp(dir string, pattern string) (File, error) {
 	}
 
 	return fileFacade{
-		realFile: f,
+		nub: f,
 	}, nil
 }
 
 func (_ osFacade) NewFile(fd uintptr, name string) File {
 	return fileFacade{
-		realFile: os.NewFile(fd, name),
+		nub: os.NewFile(fd, name),
 	}
 }
 
@@ -73,18 +83,18 @@ func (_ osFacade) Open(name string) (File, error) {
 	}
 
 	return fileFacade{
-		realFile: f,
+		nub: f,
 	}, nil
 }
 
 func (_ osFacade) OpenFile(name string, flag int, perm FileMode) (File, error) {
-	f, err := os.OpenFile(name, flag, perm)
+	f, err := os.OpenFile(name, flag, perm.Nub())
 	if err != nil {
 		return nil, err
 	}
 
 	return fileFacade{
-		realFile: f,
+		nub: f,
 	}, nil
 }
 
@@ -95,102 +105,107 @@ func (_ osFacade) OpenInRoot(dir string, name string) (File, error) {
 	}
 
 	return fileFacade{
-		realFile: f,
+		nub: f,
 	}, nil
 }
 
+func (f fileFacade) Nub() *os.File {
+	return f.nub
+}
+
 func (f fileFacade) Chdir() error {
-	return f.realFile.Chdir()
+	return f.nub.Chdir()
 }
 
 func (f fileFacade) Chmod(mode FileMode) error {
-	return f.realFile.Chmod(mode)
+	return f.nub.Chmod(mode.Nub())
 }
 
 func (f fileFacade) Chown(uid int, gid int) error {
-	return f.realFile.Chown(uid, gid)
+	return f.nub.Chown(uid, gid)
 }
 
 func (f fileFacade) Close() error {
-	return f.realFile.Close()
+	return f.nub.Close()
 }
 
 func (f fileFacade) Fd() uintptr {
-	return f.realFile.Fd()
+	return f.nub.Fd()
 }
 
 func (f fileFacade) Name() string {
-	return f.realFile.Name()
+	return f.nub.Name()
 }
 
 func (f fileFacade) Read(b []byte) (int, error) {
-	return f.realFile.Read(b)
+	return f.nub.Read(b)
 }
 
 func (f fileFacade) ReadAt(b []byte, offset int64) (int, error) {
-	return f.realFile.ReadAt(b, offset)
+	return f.nub.ReadAt(b, offset)
 }
 
 func (f fileFacade) ReadDir(n int) ([]DirEntry, error) {
-	return f.realFile.ReadDir(n)
+	dea, err := f.nub.ReadDir(n)
+	return fs.ToDirEntryList(dea), err
 }
 
 func (f fileFacade) ReadFrom(r io.Reader) (int64, error) {
-	return f.realFile.ReadFrom(r)
+	return f.nub.ReadFrom(r)
 }
 
 func (f fileFacade) Readdir(n int) ([]FileInfo, error) {
-	return f.realFile.Readdir(n)
+	return f.nub.Readdir(n)
 }
 
 func (f fileFacade) Readdirnames(n int) ([]string, error) {
-	return f.realFile.Readdirnames(n)
+	return f.nub.Readdirnames(n)
 }
 
 func (f fileFacade) Seek(offset int64, whence int) (int64, error) {
-	return f.realFile.Seek(offset, whence)
+	return f.nub.Seek(offset, whence)
 }
 
 func (f fileFacade) SetDeadline(t time.Time) error {
-	return f.realFile.SetDeadline(t)
+	return f.nub.SetDeadline(t)
 }
 
 func (f fileFacade) SetReadDeadline(t time.Time) error {
-	return f.realFile.SetReadDeadline(t)
+	return f.nub.SetReadDeadline(t)
 }
 
 func (f fileFacade) SetWriteDeadline(t time.Time) error {
-	return f.realFile.SetWriteDeadline(t)
+	return f.nub.SetWriteDeadline(t)
 }
 
 func (f fileFacade) Stat() (FileInfo, error) {
-	return f.realFile.Stat()
+	return f.nub.Stat()
 }
 
 func (f fileFacade) Sync() error {
-	return f.realFile.Sync()
+	return f.nub.Sync()
 }
 
 func (f fileFacade) SyscallConn() (syscall.RawConn, error) {
-	return f.realFile.SyscallConn()
+	return f.nub.SyscallConn()
 }
 
 func (f fileFacade) Truncate(size int64) error {
-	return f.realFile.Truncate(size)
+	return f.nub.Truncate(size)
 }
 
 func (f fileFacade) Write(b []byte) (int, error) {
-	return f.realFile.Write(b)
+	return f.nub.Write(b)
 }
 
 func (f fileFacade) WriteAt(b []byte, off int64) (int, error) {
-	return f.realFile.WriteAt(b, off)
+	return f.nub.WriteAt(b, off)
 }
 
 func (f fileFacade) WriteString(s string) (int, error) {
-	return f.realFile.WriteString(s)
+	return f.nub.WriteString(s)
 }
 
 func (f fileFacade) WriteTo(w io.Writer) (int64, error) {
-	return f.realFile.WriteTo(w)
+	return f.nub.WriteTo(w)
 }

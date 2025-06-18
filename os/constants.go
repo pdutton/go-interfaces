@@ -2,6 +2,8 @@ package os
 
 import (
 	"os"
+
+	"github.com/pdutton/go-interfaces/io/fs"
 )
 
 const (
@@ -22,26 +24,26 @@ const (
 	PathSeparator     = os.PathSeparator
 	PathListSeparator = os.PathListSeparator
 
-	ModeFile       = FileMode(0)
-	ModeDir        = os.ModeDir
-	ModeAppend     = os.ModeAppend
-	ModeExclusive  = os.ModeExclusive
-	ModeTemporary  = os.ModeTemporary
-	ModeSymlink    = os.ModeSymlink
-	ModeDevice     = os.ModeDevice
-	ModeNamedPipe  = os.ModeNamedPipe
-	ModeSocket     = os.ModeSocket
-	ModeSetuid     = os.ModeSetuid
-	ModeSetgid     = os.ModeSetgid
-	ModeCharDevice = os.ModeCharDevice
-	ModeSticky     = os.ModeSticky
-	ModeIrregular  = os.ModeIrregular
+	DevNull = os.DevNull
+)
 
-	ModeType = os.ModeType
+var (
+	ModeFile       = fs.ModeFile
+	ModeDir        = fs.ModeDir
+	ModeAppend     = fs.ModeAppend
+	ModeExclusive  = fs.ModeExclusive
+	ModeTemporary  = fs.ModeTemporary
+	ModeSymlink    = fs.ModeSymlink
+	ModeDevice     = fs.ModeDevice
+	ModeNamedPipe  = fs.ModeNamedPipe
+	ModeSocket     = fs.ModeSocket
+	ModeSetuid     = fs.ModeSetuid
+	ModeSetgid     = fs.ModeSetgid
+	ModeCharDevice = fs.ModeCharDevice
+	ModeSticky     = fs.ModeSticky
+	ModeIrregular  = fs.ModeIrregular
 
 	ModePerm = os.ModePerm
-
-	DevNull = os.DevNull
 )
 
 var (

@@ -11,10 +11,13 @@ type Process interface {
 	Release() error
 	Signal(Signal) error
 	Wait() (*ProcessState, error)
+
+	// Return the underlying process object
+	Nub() *os.Process
 }
 
 type processFacade struct {
-	realProcess *os.Process
+	nub *os.Process
 }
 
 func (_ osFacade) FindProcess(pid int) (Process, error) {
@@ -24,7 +27,7 @@ func (_ osFacade) FindProcess(pid int) (Process, error) {
 	}
 
 	return processFacade{
-		realProcess: p,
+		nub: p,
 	}, nil
 }
 
@@ -35,26 +38,36 @@ func (_ osFacade) StartProcess(name string, argv []string, attr *ProcAttr) (Proc
 	}
 
 	return processFacade{
-		realProcess: p,
+		nub: p,
 	}, nil
 }
 
+func WrapProcess(p *os.Process) processFacade{
+	return processFacade{
+		nub: p,
+	}
+}
+
+func (p processFacade) Nub() *os.Process {
+	return p.nub
+}
+
 func (p processFacade) PID() int {
-	return p.realProcess.Pid
+	return p.nub.Pid
 }
 
 func (p processFacade) Kill() error {
-	return p.realProcess.Kill()
+	return p.nub.Kill()
 }
 
 func (p processFacade) Release() error {
-	return p.realProcess.Release()
+	return p.nub.Release()
 }
 
 func (p processFacade) Signal(sig Signal) error {
-	return p.realProcess.Signal(sig)
+	return p.nub.Signal(sig)
 }
 
 func (p processFacade) Wait() (*ProcessState, error) {
-	return p.realProcess.Wait()
+	return p.nub.Wait()
 }

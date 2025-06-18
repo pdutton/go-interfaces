@@ -1,9 +1,10 @@
 package os
 
 import (
-	"io/fs"
 	"os"
 	"time"
+
+	"github.com/pdutton/go-interfaces/io/fs"
 )
 
 type OS interface {
@@ -97,15 +98,15 @@ func NewOS() OS {
 }
 
 func (_ osFacade) Stdin() File {
-	return os.Stdin
+	return WrapFile(os.Stdin)
 }
 
 func (_ osFacade) Stderr() File {
-	return os.Stderr
+	return WrapFile(os.Stderr)
 }
 
 func (_ osFacade) Stdout() File {
-	return os.Stdout
+	return WrapFile(os.Stdout)
 }
 
 func (_ osFacade) Args() []string {
@@ -117,7 +118,7 @@ func (_ osFacade) Chdir(dir string) error {
 }
 
 func (_ osFacade) Chmod(name string, mode FileMode) error {
-	return os.Chmod(name, mode)
+	return os.Chmod(name, mode.Nub())
 }
 
 func (_ osFacade) Chown(name string, uid, gid int) error {
@@ -237,11 +238,11 @@ func (_ osFacade) LookupEnv(key string) (string, bool) {
 }
 
 func (_ osFacade) Mkdir(name string, perm FileMode) error {
-	return os.Mkdir(name, perm)
+	return os.Mkdir(name, perm.Nub())
 }
 
 func (_ osFacade) MkdirAll(name string, perm FileMode) error {
-	return os.MkdirAll(name, perm)
+	return os.MkdirAll(name, perm.Nub())
 }
 
 func (_ osFacade) MkdirTemp(dir, pattern string) (string, error) {
@@ -253,7 +254,8 @@ func (_ osFacade) NewSyscallError(syscall string, err error) error {
 }
 
 func (_ osFacade) Pipe() (File, File, error) {
-	return os.Pipe()
+	f1, f2, err := os.Pipe()
+	return WrapFile(f1), WrapFile(f2), err
 }
 
 func (_ osFacade) ReadFile(name string) ([]byte, error) {
@@ -313,11 +315,12 @@ func (_ osFacade) UserHomeDir() (string, error) {
 }
 
 func (_ osFacade) WriteFile(name string, data []byte, perm FileMode) error {
-	return os.WriteFile(name, data, perm)
+	return os.WriteFile(name, data, perm.Nub())
 }
 
 func (_ osFacade) ReadDir(name string) ([]DirEntry, error) {
-	return os.ReadDir(name)
+	dea, err := os.ReadDir(name)
+	return fs.ToDirEntryList(dea), err
 }
 
 func (_ osFacade) Lstat(name string) (FileInfo, error) {

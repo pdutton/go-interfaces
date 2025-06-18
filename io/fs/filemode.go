@@ -4,25 +4,29 @@ import (
     "io/fs"
 )
 
-const (
-    ModeRegular fs.FileMode = 0
+var (
+	// These "constants" are not generally useful given that
+	// the FileMode interface has Is* methods, but they could
+	// come in handy in unit testing so I will maintain them.
 
-    ModeDir        = fs.ModeDir
-    ModeAppend     = fs.ModeAppend
-    ModeExclusive  = fs.ModeExclusive
-    ModeTemporary  = fs.ModeTemporary
-    ModeSymlink    = fs.ModeSymlink
-    ModeDevice     = fs.ModeDevice
-    ModeNamedPipe  = fs.ModeNamedPipe
-    ModeSocket     = fs.ModeSocket
-    ModeSetuid     = fs.ModeSetuid
-    ModeSetgid     = fs.ModeSetgid
-    ModeCharDevice = fs.ModeCharDevice
-    ModeSticky     = fs.ModeSticky
-    ModeIrregular  = fs.ModeIrregular
+	ModeFile = NewFileMode(fs.FileMode(0))
 
-    ModeType = fs.ModeType
-    ModePerm = fs.ModePerm
+	ModeDir        = NewFileMode(fs.ModeDir)
+	ModeAppend     = NewFileMode(fs.ModeAppend)
+	ModeExclusive  = NewFileMode(fs.ModeExclusive)
+	ModeTemporary  = NewFileMode(fs.ModeTemporary)
+	ModeSymlink    = NewFileMode(fs.ModeSymlink)
+	ModeDevice     = NewFileMode(fs.ModeDevice)
+	ModeNamedPipe  = NewFileMode(fs.ModeNamedPipe)
+	ModeSocket     = NewFileMode(fs.ModeSocket)
+	ModeSetuid     = NewFileMode(fs.ModeSetuid)
+	ModeSetgid     = NewFileMode(fs.ModeSetgid)
+	ModeCharDevice = NewFileMode(fs.ModeCharDevice)
+	ModeSticky     = NewFileMode(fs.ModeSticky)
+	ModeIrregular  = NewFileMode(fs.ModeIrregular)
+
+	// ModePerm is really just a bloated int
+	ModePerm = fs.ModePerm
 )
 
 type FileMode interface {
@@ -41,86 +45,88 @@ type FileMode interface {
     IsSticky() bool
     IsIrregular() bool
     
-    Perm() FileMode
+    Perm() fs.FileMode
     String() string
-    Type() FileMode
+
+    // Nub retrieves the underlying implementation
+    Nub() fs.FileMode
 }
 
 type fileModeFacade struct {
-    realFileMode fs.FileMode
+    nub fs.FileMode
 }
 
 func NewFileMode(fm fs.FileMode) fileModeFacade {
     return fileModeFacade{
-        realFileMode: fm,
+        nub: fm,
     }
 }
 
+func (fm fileModeFacade) Nub() fs.FileMode {
+	return fm.nub
+}
+
 func (fm fileModeFacade) IsRegular() bool {
-	return fm.realFileMode.IsRegular()
+	return fm.nub.IsRegular()
 }
 
 func (fm fileModeFacade) IsDir() bool {
-	return fm.realFileMode.IsDir()
+	return fm.nub.IsDir()
 }
 
 func (fm fileModeFacade) IsAppend() bool {
-	return uint32(fm.realFileMode.Type()) & uint32(ModeAppend) != 0
+	return uint32(fm.nub.Type()) & uint32(fs.ModeAppend) != 0
 }
 
 func (fm fileModeFacade) IsExclusive() bool {
-	return uint32(fm.realFileMode.Type()) & uint32(ModeExclusive) != 0
+	return uint32(fm.nub.Type()) & uint32(fs.ModeExclusive) != 0
 }
 
 func (fm fileModeFacade) IsTemporary() bool {
-	return uint32(fm.realFileMode.Type()) & uint32(ModeTemporary) != 0
+	return uint32(fm.nub.Type()) & uint32(fs.ModeTemporary) != 0
 }
 
 func (fm fileModeFacade) IsSymlink() bool {
-	return uint32(fm.realFileMode.Type()) & uint32(ModeSymlink) != 0
+	return uint32(fm.nub.Type()) & uint32(fs.ModeSymlink) != 0
 }
 
 func (fm fileModeFacade) IsDevice() bool {
-	return uint32(fm.realFileMode.Type()) & uint32(ModeDevice) != 0
+	return uint32(fm.nub.Type()) & uint32(fs.ModeDevice) != 0
 }
 
 func (fm fileModeFacade) IsNamedPipe() bool {
-	return uint32(fm.realFileMode.Type()) & uint32(ModeNamedPipe) != 0
+	return uint32(fm.nub.Type()) & uint32(fs.ModeNamedPipe) != 0
 }
 
 func (fm fileModeFacade) IsSocket() bool {
-	return uint32(fm.realFileMode.Type()) & uint32(ModeSocket) != 0
+	return uint32(fm.nub.Type()) & uint32(fs.ModeSocket) != 0
 }
 
 func (fm fileModeFacade) IsSetuid() bool {
-	return uint32(fm.realFileMode.Type()) & uint32(ModeSetuid) != 0
+	return uint32(fm.nub.Type()) & uint32(fs.ModeSetuid) != 0
 }
 
 func (fm fileModeFacade) IsSetgid() bool {
-	return uint32(fm.realFileMode.Type()) & uint32(ModeSetgid) != 0
+	return uint32(fm.nub.Type()) & uint32(fs.ModeSetgid) != 0
 }
 
 func (fm fileModeFacade) IsCharDevice() bool {
-	return uint32(fm.realFileMode.Type()) & uint32(ModeCharDevice) != 0
+	return uint32(fm.nub.Type()) & uint32(fs.ModeCharDevice) != 0
 }
 
 func (fm fileModeFacade) IsSticky() bool {
-	return uint32(fm.realFileMode.Type()) & uint32(ModeSticky) != 0
+	return uint32(fm.nub.Type()) & uint32(fs.ModeSticky) != 0
 }
 
 func (fm fileModeFacade) IsIrregular() bool {
-	return uint32(fm.realFileMode.Type()) & uint32(ModeIrregular) != 0
+	return uint32(fm.nub.Type()) & uint32(fs.ModeIrregular) != 0
 }
 
-func (fm fileModeFacade) Perm() FileMode {
-    return NewFileMode(fm.realFileMode.Perm())
+func (fm fileModeFacade) Perm() fs.FileMode {
+    return fm.nub.Perm()
 }
 
 func (fm fileModeFacade) String() string {
-    return fm.realFileMode.String()
-}
-
-func (fm fileModeFacade) Type() FileMode {
-    return NewFileMode(fm.realFileMode.Type())
+    return fm.nub.String()
 }
 

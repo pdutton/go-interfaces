@@ -11,16 +11,19 @@ type DirEntry interface {
     Type() fs.FileMode
     Info() (fs.FileInfo, error)
 
+    // Return the underlying direntry instance
+    Nub() fs.DirEntry
+
     format() string
 }
 
 type dirEntryFacade struct {
-    realDirEntry fs.DirEntry
+    nub fs.DirEntry
 }
 
 func NewDirEntry(de fs.DirEntry) dirEntryFacade {
     return dirEntryFacade{
-        realDirEntry: de,
+        nub: de,
     }
 }
 
@@ -36,7 +39,7 @@ func ToDirEntryList(in []fs.DirEntry) []DirEntry {
 
 func (_ fileSystemFacade) FileInfoToDirEntry(info FileInfo) DirEntry {
     return dirEntryFacade{
-        realDirEntry: fs.FileInfoToDirEntry(info),
+        nub: fs.FileInfoToDirEntry(info),
     }
 }
 
@@ -48,30 +51,34 @@ func (_ fileSystemFacade) ReadDir(fsys FS, name string) ([]DirEntry, error) {
 
     var results = []DirEntry{}
     for _, entry := range entries {
-        results = append(results, dirEntryFacade{ realDirEntry: entry})
+        results = append(results, dirEntryFacade{ nub: entry})
     }
 
     return results, nil
 }
 
+func (de dirEntryFacade) Nub() fs.DirEntry {
+	return de.nub
+}
+
 func (de dirEntryFacade) Name() string {
-    return de.realDirEntry.Name()
+    return de.nub.Name()
 }
 
 func (de dirEntryFacade) IsDir() bool {
-    return de.realDirEntry.IsDir()
+    return de.nub.IsDir()
 }
 
 func (de dirEntryFacade) Type() fs.FileMode {
-    return de.realDirEntry.Type()
+    return de.nub.Type()
 }
 
 func (de dirEntryFacade) Info() (fs.FileInfo, error) {
-    return de.realDirEntry.Info()
+    return de.nub.Info()
 }
 
 func (de dirEntryFacade) format() string {
-    return fs.FormatDirEntry(de.realDirEntry)
+    return fs.FormatDirEntry(de.nub)
 }
 
 
