@@ -1,6 +1,7 @@
 package os
 
 import (
+	rfs "io/fs"
 	"os"
 	"time"
 
@@ -17,7 +18,7 @@ type OS interface {
 
 	// Functions:
 	Chdir(string) error
-	Chmod(string, FileMode) error
+	Chmod(string, rfs.FileMode) error
 	Chown(string, int, int) error
 	Chtimes(string, time.Time, time.Time) error
 	Clearenv()
@@ -47,8 +48,8 @@ type OS interface {
 	Lchown(string, int, int) error
 	Link(string, string) error
 	LookupEnv(string) (string, bool)
-	Mkdir(string, FileMode) error
-	MkdirAll(string, FileMode) error
+	Mkdir(string, rfs.FileMode) error
+	MkdirAll(string, rfs.FileMode) error
 	MkdirTemp(string, string) (string, error)
 	NewSyscallError(string, error) error
 	Pipe() (File, File, error)
@@ -66,7 +67,7 @@ type OS interface {
 	UserCacheDir() (string, error)
 	UserConfigDir() (string, error)
 	UserHomeDir() (string, error)
-	WriteFile(string, []byte, FileMode) error
+	WriteFile(string, []byte, rfs.FileMode) error
 
 	// DirEntry constructors
 	ReadDir(string) ([]DirEntry, error)
@@ -76,7 +77,7 @@ type OS interface {
 	CreateTemp(string, string) (File, error)
 	NewFile(uintptr, string) File
 	Open(string) (File, error)
-	OpenFile(string, int, FileMode) (File, error)
+	OpenFile(string, int, rfs.FileMode) (File, error)
 	OpenInRoot(string, string) (File, error)
 
 	// FileInfo constructors
@@ -117,8 +118,8 @@ func (_ osFacade) Chdir(dir string) error {
 	return os.Chdir(dir)
 }
 
-func (_ osFacade) Chmod(name string, mode FileMode) error {
-	return os.Chmod(name, mode.Nub())
+func (_ osFacade) Chmod(name string, mode rfs.FileMode) error {
+	return os.Chmod(name, mode)
 }
 
 func (_ osFacade) Chown(name string, uid, gid int) error {
@@ -237,12 +238,12 @@ func (_ osFacade) LookupEnv(key string) (string, bool) {
 	return os.LookupEnv(key)
 }
 
-func (_ osFacade) Mkdir(name string, perm FileMode) error {
-	return os.Mkdir(name, perm.Nub())
+func (_ osFacade) Mkdir(name string, perm rfs.FileMode) error {
+	return os.Mkdir(name, perm)
 }
 
-func (_ osFacade) MkdirAll(name string, perm FileMode) error {
-	return os.MkdirAll(name, perm.Nub())
+func (_ osFacade) MkdirAll(name string, perm rfs.FileMode) error {
+	return os.MkdirAll(name, perm)
 }
 
 func (_ osFacade) MkdirTemp(dir, pattern string) (string, error) {
@@ -314,8 +315,8 @@ func (_ osFacade) UserHomeDir() (string, error) {
 	return os.UserHomeDir()
 }
 
-func (_ osFacade) WriteFile(name string, data []byte, perm FileMode) error {
-	return os.WriteFile(name, data, perm.Nub())
+func (_ osFacade) WriteFile(name string, data []byte, perm rfs.FileMode) error {
+	return os.WriteFile(name, data, perm)
 }
 
 func (_ osFacade) ReadDir(name string) ([]DirEntry, error) {
