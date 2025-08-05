@@ -11,7 +11,7 @@ type DirEntry interface {
     Type() fs.FileMode
     Info() (fs.FileInfo, error)
 
-    format() string
+    Format() string
 }
 
 type dirEntryFacade struct {
@@ -70,7 +70,7 @@ func (de dirEntryFacade) Info() (fs.FileInfo, error) {
     return de.realDirEntry.Info()
 }
 
-func (de dirEntryFacade) format() string {
+func (de dirEntryFacade) Format() string {
     return fs.FormatDirEntry(de.realDirEntry)
 }
 

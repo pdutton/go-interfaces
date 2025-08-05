@@ -33,7 +33,7 @@ func NewFileSystem() fileSystemFacade {
 }
 
 func (_ fileSystemFacade) FormatDirEntry(dir DirEntry) string {
-    return dir.format()
+    return dir.Format()
 }
 
 func (_ fileSystemFacade) FormatFileInfo(info FileInfo) string {
