@@ -14,7 +14,7 @@ type DirEntry interface {
     // Return the underlying direntry instance
     Nub() fs.DirEntry
 
-    format() string
+    Format() string
 }
 
 type dirEntryFacade struct {
@@ -78,7 +78,7 @@ func (de dirEntryFacade) Info() (FileInfo, error) {
 	return NewFileInfo(inf), err
 }
 
-func (de dirEntryFacade) format() string {
+func (de dirEntryFacade) Format() string {
     return fs.FormatDirEntry(de.nub)
 }
 
