@@ -28,6 +28,12 @@ const (
 )
 
 var (
+	Stdin  = os.Stdin
+	Stderr = os.Stderr
+	Stdout = os.Stdout
+)
+
+var (
 	ModeFile       = fs.ModeFile
 	ModeDir        = fs.ModeDir
 	ModeAppend     = fs.ModeAppend

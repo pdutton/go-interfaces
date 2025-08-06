@@ -6,9 +6,9 @@ import (
 	"github.com/pdutton/go-interfaces/io/fs"
 )
 
-type DirEntry   = fs.DirEntry
-type FileInfo   = fs.FileInfo
-type FileMode   = fs.FileMode
+type DirEntry = fs.DirEntry
+type FileInfo = fs.FileInfo
+type FileMode = fs.FileMode
 type FSFileMode = fs.FSFileMode
 
 type LinkError = os.LinkError
