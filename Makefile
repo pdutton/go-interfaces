@@ -9,6 +9,7 @@ DIRS:=\
   net/http/server \
   os \
   os/exec \
+  os/signal \
   path \
   path/filepath \
   sync
