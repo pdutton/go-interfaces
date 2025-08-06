@@ -42,7 +42,7 @@ func (_ osFacade) StartProcess(name string, argv []string, attr *ProcAttr) (Proc
 	}, nil
 }
 
-func WrapProcess(p *os.Process) processFacade{
+func WrapProcess(p *os.Process) processFacade {
 	return processFacade{
 		nub: p,
 	}
