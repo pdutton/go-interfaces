@@ -2,6 +2,7 @@ package http
 
 import (
 	"bufio"
+	"context"
 	"io"
 	"net/http"
 	"net/url"
@@ -9,6 +10,13 @@ import (
 
 // HTTP is an interface for the functions in the net/http package
 type HTTP interface {
+	// Client constructors:
+	NewClient(options ...ClientOption) Client
+
+	// Request constructors:
+	NewRequest(method, url string, body io.Reader, options ...RequestOption) (Request, error)
+	NewRequestWithContext(ctx context.Context, method, url string, body io.Reader, options ...RequestOption) (Request, error)
+
 	// Response constructors:
 	Get(string) (Response, error)
 	Head(string) (Response, error)

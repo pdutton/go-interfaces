@@ -141,7 +141,7 @@ func newRequest(req *http.Request) requestFacade {
 	}
 }
 
-func NewRequest(method, url string, body io.Reader, options ...RequestOption) (Request, error) {
+func (_ httpFacade) NewRequest(method, url string, body io.Reader, options ...RequestOption) (Request, error) {
 	req, err := http.NewRequest(method, url, body)
 	if err != nil {
 		return nil, err
@@ -156,7 +156,7 @@ func NewRequest(method, url string, body io.Reader, options ...RequestOption) (R
 	return facade, nil
 }
 
-func NewRequestWithContext(ctx context.Context, method, url string, body io.Reader, options ...RequestOption) (Request, error) {
+func (_ httpFacade) NewRequestWithContext(ctx context.Context, method, url string, body io.Reader, options ...RequestOption) (Request, error) {
 	req, err := http.NewRequestWithContext(ctx, method, url, body)
 	if err != nil {
 		return nil, err
