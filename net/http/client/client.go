@@ -12,7 +12,7 @@ type CheckRedirectFn = func(*http.Request, []*http.Request) error
 // Client is an interface for the net/http.Client struct
 type Client interface {
 	CloseIdleConnections()
-	Do(*http.Request) (Response, error)
+	Do(Request) (Response, error)
 	Get(string) (Response, error)
 	Head(string) (Response, error)
 	Post(string, string, io.Reader) (Response, error)
@@ -72,8 +72,8 @@ func (c clientFacade) CloseIdleConnections() {
 	c.realClient.CloseIdleConnections()
 }
 
-func (c clientFacade) Do(req *http.Request) (Response, error) {
-	resp, err := c.realClient.Do(req)
+func (c clientFacade) Do(req Request) (Response, error) {
+	resp, err := c.realClient.Do(req.RealRequest())
 	if err != nil {
 		return nil, err
 	}
