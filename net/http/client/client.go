@@ -58,7 +58,7 @@ type clientFacade struct {
 }
 
 // NewClient creates a Client with default values
-func NewClient(options ...ClientOption) Client {
+func (_ httpFacade) NewClient(options ...ClientOption) Client {
 	var facade clientFacade
 
 	for _, opt := range options {
