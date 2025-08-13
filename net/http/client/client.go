@@ -17,6 +17,7 @@ type Client interface {
 	Head(string) (Response, error)
 	Post(string, string, io.Reader) (Response, error)
 	PostForm(string, url.Values) (Response, error)
+	GetTransport() RoundTripper
 }
 
 // ClientOption allows you to set options on a client in the NewClient constructor
@@ -121,4 +122,8 @@ func (c clientFacade) PostForm(url string, data url.Values) (Response, error) {
 	}
 
 	return newResponse(resp), nil
+}
+
+func (c clientFacade) GetTransport() RoundTripper {
+	return c.realClient.Transport
 }
