@@ -139,7 +139,7 @@ func WithProtocols(p *Protocols) ServerOption {
 }
 
 type serverFacade struct {
-	realServer http.Server
+	realServer *http.Server
 }
 
 // NewServer creates a Server with default values
@@ -147,10 +147,16 @@ func NewServer(options ...ServerOption) Server {
 	var facade serverFacade
 
 	for _, opt := range options {
-		opt(&facade.realServer)
+		opt(facade.realServer)
 	}
 
 	return facade
+}
+
+func WrapServer(svr *http.Server) Server {
+	return serverFacade{
+		realServer: svr,
+	}
 }
 
 func (s serverFacade) Close() error {

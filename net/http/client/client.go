@@ -54,7 +54,7 @@ func WithTimeout(t time.Duration) ClientOption {
 }
 
 type clientFacade struct {
-	realClient http.Client
+	realClient *http.Client
 }
 
 // NewClient creates a Client with default values
@@ -62,10 +62,16 @@ func (_ httpFacade) NewClient(options ...ClientOption) Client {
 	var facade clientFacade
 
 	for _, opt := range options {
-		opt(&facade.realClient)
+		opt(facade.realClient)
 	}
 
 	return facade
+}
+
+func (_ httpFacade) WrapClient(cl *http.Client) Client {
+	return clientFacade{
+		realClient: cl,
+	}
 }
 
 func (c clientFacade) CloseIdleConnections() {
