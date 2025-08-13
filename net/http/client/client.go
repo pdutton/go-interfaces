@@ -60,13 +60,15 @@ type clientFacade struct {
 
 // NewClient creates a Client with default values
 func (_ httpFacade) NewClient(options ...ClientOption) Client {
-	var facade clientFacade
+	var client http.Client
 
 	for _, opt := range options {
-		opt(facade.realClient)
+		opt(&client)
 	}
 
-	return facade
+	return clientFacade{
+		realClient: &client,
+	}
 }
 
 func WrapClient(cl *http.Client) Client {

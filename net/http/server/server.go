@@ -144,13 +144,15 @@ type serverFacade struct {
 
 // NewServer creates a Server with default values
 func NewServer(options ...ServerOption) Server {
-	var facade serverFacade
+	var server http.Server
 
 	for _, opt := range options {
-		opt(facade.realServer)
+		opt(&server)
 	}
 
-	return facade
+	return serverFacade{
+		realServer: &server,
+	}
 }
 
 func WrapServer(svr *http.Server) Server {
