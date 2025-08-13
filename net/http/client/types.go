@@ -19,3 +19,4 @@ type Header = http.Header
 type Protocols = http.Protocols
 type RoundTripper = http.RoundTripper
 type SameSite = http.SameSite
+type Transport = http.Transport
