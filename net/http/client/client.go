@@ -68,7 +68,7 @@ func (_ httpFacade) NewClient(options ...ClientOption) Client {
 	return facade
 }
 
-func (_ httpFacade) WrapClient(cl *http.Client) Client {
+func WrapClient(cl *http.Client) Client {
 	return clientFacade{
 		realClient: cl,
 	}
