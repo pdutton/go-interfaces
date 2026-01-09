@@ -57,3 +57,18 @@ func (_ jsonFacade) Indent(dst *bytes.Buffer, src []byte, prefix, indent string)
 func (_ jsonFacade) Valid(data []byte) bool {
 	return json.Valid(data)
 }
+
+// Marshal returns the JSON encoding of v by calling encoding/json.Marshal.
+func Marshal(v any) ([]byte, error) {
+	return json.Marshal(v)
+}
+
+// MarshalIndent returns formatted JSON encoding of v by calling encoding/json.MarshalIndent.
+func MarshalIndent(v any, prefix, indent string) ([]byte, error) {
+	return json.MarshalIndent(v, prefix, indent)
+}
+
+// Unmarshal parses the JSON-encoded data and stores the result by calling encoding/json.Unmarshal.
+func Unmarshal(data []byte, v any) error {
+	return json.Unmarshal(data, v)
+}
