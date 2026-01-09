@@ -3,6 +3,7 @@
 GO?=go
 
 DIRS:=\
+  encoding/json \
   io \
   net \
   net/http/client \
