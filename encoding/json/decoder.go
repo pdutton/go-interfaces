@@ -19,16 +19,21 @@ type decoderFacade struct {
 }
 
 func (_ jsonFacade) NewDecoder(r io.Reader, options ...DecoderOption) Decoder {
+	return NewDecoder(r, options...)
+}
+
+func WrapDecoder(dec *json.Decoder) Decoder {
+	return decoderFacade{realDecoder: dec}
+}
+
+// NewDecoder creates a new Decoder that reads from r with optional configuration.
+func NewDecoder(r io.Reader, options ...DecoderOption) Decoder {
 	dec := json.NewDecoder(r)
 
 	for _, opt := range options {
 		opt(dec)
 	}
 
-	return decoderFacade{realDecoder: dec}
-}
-
-func WrapDecoder(dec *json.Decoder) Decoder {
 	return decoderFacade{realDecoder: dec}
 }
 

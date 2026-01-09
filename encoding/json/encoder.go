@@ -17,16 +17,21 @@ type encoderFacade struct {
 }
 
 func (_ jsonFacade) NewEncoder(w io.Writer, options ...EncoderOption) Encoder {
+	return NewEncoder(w, options...)
+}
+
+func WrapEncoder(enc *json.Encoder) Encoder {
+	return encoderFacade{realEncoder: enc}
+}
+
+// NewEncoder creates a new Encoder that writes to w with optional configuration.
+func NewEncoder(w io.Writer, options ...EncoderOption) Encoder {
 	enc := json.NewEncoder(w)
 
 	for _, opt := range options {
 		opt(enc)
 	}
 
-	return encoderFacade{realEncoder: enc}
-}
-
-func WrapEncoder(enc *json.Encoder) Encoder {
 	return encoderFacade{realEncoder: enc}
 }
 
