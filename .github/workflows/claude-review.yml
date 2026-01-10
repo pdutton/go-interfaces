@@ -1,0 +1,48 @@
+name: Claude Code Review
+
+on:
+  pull_request:
+    types: [opened, synchronize]
+
+permissions:
+  contents: read
+  pull-requests: write
+
+jobs:
+  claude-review:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Claude Code Review
+        uses: anthropics/claude-code-action@v1
+        with:
+          prompt: |
+            Review this PR for the go-interfaces library. Focus on:
+
+            **Architecture Patterns** (see CLAUDE.md):
+            - Facade pattern: proper interface definitions and facade implementations
+            - Wrapping pattern: correct use of underlying stdlib types (nub, realClient, etc.)
+            - Functional options: consistent With* option naming and application
+
+            **Go Best Practices**:
+            - Error handling
+            - Naming conventions
+            - Proper type aliasing
+            - Interface compliance
+
+            **Testing**:
+            - Unit test coverage for new interfaces
+            - Test naming conventions (*_test.go)
+            - Concurrent behavior tests where relevant
+
+            **Documentation**:
+            - Package-level comments
+            - Interface method documentation
+
+            Provide specific, actionable feedback with file:line references.
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}

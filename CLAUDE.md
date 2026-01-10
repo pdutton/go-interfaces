@@ -16,6 +16,41 @@ This repository provides interface wrappers for Go standard library packages to 
 ### Formatting
 - Format all code: `make fmt` or `go fmt ./...`
 
+## Automated Code Reviews
+
+This repository uses Claude Code to automatically review pull requests via GitHub Actions.
+
+### How It Works
+
+When you open or update a pull request, the Claude Code Review workflow (`.github/workflows/claude-review.yml`) automatically triggers and provides feedback on:
+
+- **Architecture Patterns**: Adherence to facade, wrapping, and functional options patterns
+- **Go Best Practices**: Error handling, naming conventions, type aliasing, interface compliance
+- **Testing**: Unit test coverage, test naming, concurrent behavior tests
+- **Documentation**: Package-level comments and interface method documentation
+
+Claude will post review comments directly on the PR with specific, actionable feedback including file:line references.
+
+### Setup Requirements
+
+**Repository administrators** must configure the following secret:
+
+1. Go to repository Settings → Secrets and variables → Actions
+2. Add a new secret named `ANTHROPIC_API_KEY` with your Anthropic API key
+3. The workflow will use this to authenticate with Claude's API
+
+The `GITHUB_TOKEN` is provided automatically by GitHub Actions and requires no additional setup.
+
+### Workflow Triggers
+
+The review runs automatically when:
+- A new pull request is opened
+- New commits are pushed to an existing pull request
+
+### Customizing Reviews
+
+To modify what Claude reviews, edit the `prompt` section in `.github/workflows/claude-review.yml`.
+
 ## Architecture Patterns
 
 ### Facade Pattern
