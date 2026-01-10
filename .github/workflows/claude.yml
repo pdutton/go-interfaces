@@ -1,4 +1,5 @@
 name: Claude Code
+run-name: "[Assistant] ${{ github.event.issue.number && format('Issue #{0}', github.event.issue.number) || format('PR #{0}', github.event.pull_request.number) }}"
 
 on:
   issue_comment:
