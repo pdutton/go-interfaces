@@ -3,8 +3,8 @@ package net
 import (
 	"net"
 	"os"
-	"time"
 	"syscall"
+	"time"
 )
 
 type UnixListener interface {
@@ -24,7 +24,7 @@ type unixListenerFacade struct {
 
 func (_ netFacade) ListenUnix(network string, laddr *UnixAddr) (UnixListener, error) {
 	ul, err := net.ListenUnix(network, laddr)
-	return unixListenerFacade{ unixListener: ul }, err
+	return unixListenerFacade{unixListener: ul}, err
 }
 
 func (ul unixListenerFacade) Accept() (Conn, error) {
@@ -58,4 +58,3 @@ func (ul unixListenerFacade) SetUnlinkOnClose(unlink bool) {
 func (ul unixListenerFacade) SyscallConn() (syscall.RawConn, error) {
 	return ul.unixListener.SyscallConn()
 }
-

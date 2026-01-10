@@ -39,17 +39,17 @@ type udpConnFacade struct {
 
 func (_ netFacade) DialUDP(network string, laddr, raddr *UDPAddr) (UDPConn, error) {
 	c, err := net.DialUDP(network, laddr, raddr)
-	return udpConnFacade{ udpConn: c }, err
+	return udpConnFacade{udpConn: c}, err
 }
 
 func (_ netFacade) ListenMulticastUDP(network string, ifi *Interface, gaddr *UDPAddr) (UDPConn, error) {
 	c, err := net.ListenMulticastUDP(network, ifi, gaddr)
-	return udpConnFacade{ udpConn: c }, err
+	return udpConnFacade{udpConn: c}, err
 }
 
 func (_ netFacade) ListenUDP(network string, laddr *UDPAddr) (UDPConn, error) {
 	c, err := net.ListenUDP(network, laddr)
-	return udpConnFacade{ udpConn: c }, err
+	return udpConnFacade{udpConn: c}, err
 }
 
 func (f udpConnFacade) Close() error {
@@ -139,5 +139,3 @@ func (f udpConnFacade) WriteToUDP(b []byte, addr *UDPAddr) (int, error) {
 func (f udpConnFacade) WriteToUDPAddrPort(b []byte, addr netip.AddrPort) (int, error) {
 	return f.udpConn.WriteToUDPAddrPort(b, addr)
 }
-
-

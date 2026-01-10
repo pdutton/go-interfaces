@@ -1,30 +1,30 @@
 package fs
 
 import (
-    "io/fs"
+	"io/fs"
 )
 
 type DirEntry interface {
-    // Access to members variables:
-    Name() string
-    IsDir() bool
-    Type() FileMode
-    Info() (FileInfo, error)
+	// Access to members variables:
+	Name() string
+	IsDir() bool
+	Type() FileMode
+	Info() (FileInfo, error)
 
-    // Return the underlying direntry instance
-    Nub() fs.DirEntry
+	// Return the underlying direntry instance
+	Nub() fs.DirEntry
 
-    Format() string
+	Format() string
 }
 
 type dirEntryFacade struct {
-    nub fs.DirEntry
+	nub fs.DirEntry
 }
 
 func NewDirEntry(de fs.DirEntry) dirEntryFacade {
-    return dirEntryFacade{
-        nub: de,
-    }
+	return dirEntryFacade{
+		nub: de,
+	}
 }
 
 func NewDirEntryList(in []fs.DirEntry) []DirEntry {
@@ -38,23 +38,23 @@ func NewDirEntryList(in []fs.DirEntry) []DirEntry {
 }
 
 func (_ fileSystemFacade) FileInfoToDirEntry(info FileInfo) DirEntry {
-    return dirEntryFacade{
-        nub: fs.FileInfoToDirEntry(info.Nub()),
-    }
+	return dirEntryFacade{
+		nub: fs.FileInfoToDirEntry(info.Nub()),
+	}
 }
 
 func (_ fileSystemFacade) ReadDir(fsys FS, name string) ([]DirEntry, error) {
-    entries, err := fs.ReadDir(fsys, name)
-    if err != nil {
-        return nil, err
-    }
+	entries, err := fs.ReadDir(fsys, name)
+	if err != nil {
+		return nil, err
+	}
 
-    var results = []DirEntry{}
-    for _, entry := range entries {
-        results = append(results, dirEntryFacade{ nub: entry})
-    }
+	var results = []DirEntry{}
+	for _, entry := range entries {
+		results = append(results, dirEntryFacade{nub: entry})
+	}
 
-    return results, nil
+	return results, nil
 }
 
 func (de dirEntryFacade) Nub() fs.DirEntry {
@@ -62,15 +62,15 @@ func (de dirEntryFacade) Nub() fs.DirEntry {
 }
 
 func (de dirEntryFacade) Name() string {
-    return de.nub.Name()
+	return de.nub.Name()
 }
 
 func (de dirEntryFacade) IsDir() bool {
-    return de.nub.IsDir()
+	return de.nub.IsDir()
 }
 
 func (de dirEntryFacade) Type() FileMode {
-    return NewFileMode(de.nub.Type())
+	return NewFileMode(de.nub.Type())
 }
 
 func (de dirEntryFacade) Info() (FileInfo, error) {
@@ -79,7 +79,5 @@ func (de dirEntryFacade) Info() (FileInfo, error) {
 }
 
 func (de dirEntryFacade) Format() string {
-    return fs.FormatDirEntry(de.nub)
+	return fs.FormatDirEntry(de.nub)
 }
-
-

@@ -33,7 +33,7 @@ func NewFileInfoList(fil []fs.FileInfo) []FileInfo {
 		fia = append(fia, NewFileInfo(fi))
 	}
 
-	return fia 
+	return fia
 }
 
 func (fi fileInfoFacade) Nub() fs.FileInfo {
@@ -63,6 +63,3 @@ func (fi fileInfoFacade) IsDir() bool {
 func (fi fileInfoFacade) Sys() any {
 	return fi.nub.Sys()
 }
-
-
-

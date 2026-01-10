@@ -602,4 +602,3 @@ func TestNewFileInfoList(t *testing.T) {
 		}
 	}
 }
-

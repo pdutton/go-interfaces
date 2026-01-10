@@ -1,34 +1,33 @@
 package sync
 
 import (
-    "sync"
+	"sync"
 )
 
 type Cond interface {
-    Broadcast()
-    Signal()
-    Wait()
+	Broadcast()
+	Signal()
+	Wait()
 }
 
 type condFacade struct {
-    realCond *sync.Cond
+	realCond *sync.Cond
 }
 
 func (_ syncFacade) NewCond(l Locker) Cond {
-    return condFacade{
-        realCond: sync.NewCond(l),
-    }
+	return condFacade{
+		realCond: sync.NewCond(l),
+	}
 }
 
 func (c condFacade) Broadcast() {
-    c.realCond.Broadcast()
+	c.realCond.Broadcast()
 }
 
 func (c condFacade) Signal() {
-    c.realCond.Signal()
+	c.realCond.Signal()
 }
 
 func (c condFacade) Wait() {
-    c.realCond.Wait()
+	c.realCond.Wait()
 }
-

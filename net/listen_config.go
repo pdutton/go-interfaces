@@ -61,4 +61,3 @@ func (lc listenConfigFacade) ListenPacket(ctx context.Context, network, address 
 func (lc listenConfigFacade) MultipathTCP() bool {
 	return lc.listenConfig.MultipathTCP()
 }
-

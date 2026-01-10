@@ -17,7 +17,7 @@ func TestNewListenConfig(t *testing.T) {
 func TestListenConfig_WithOptions(t *testing.T) {
 	n := NewNet()
 	lc := n.NewListenConfig(
-		WithKeepAliveLC(30*time.Second),
+		WithKeepAliveLC(30 * time.Second),
 	)
 
 	if lc == nil {

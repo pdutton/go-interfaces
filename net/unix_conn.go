@@ -36,12 +36,12 @@ type unixConnFacade struct {
 
 func (_ netFacade) DialUnix(network string, laddr, raddr *UnixAddr) (UnixConn, error) {
 	uc, err := net.DialUnix(network, laddr, raddr)
-	return unixConnFacade{ unixConn: uc }, err
+	return unixConnFacade{unixConn: uc}, err
 }
 
 func (_ netFacade) ListenUnixgram(network string, laddr *UnixAddr) (UnixConn, error) {
 	uc, err := net.ListenUnixgram(network, laddr)
-	return unixConnFacade{ unixConn: uc }, err
+	return unixConnFacade{unixConn: uc}, err
 }
 
 func (uc unixConnFacade) Close() error {
@@ -123,5 +123,3 @@ func (uc unixConnFacade) WriteTo(b []byte, addr Addr) (int, error) {
 func (uc unixConnFacade) WriteToUnix(b []byte, addr *UnixAddr) (int, error) {
 	return uc.unixConn.WriteToUnix(b, addr)
 }
-
-

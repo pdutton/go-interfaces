@@ -10,7 +10,7 @@ import (
 type Dialer interface {
 	Dial(network, address string) (Conn, error)
 	DialContext(ctx context.Context, network, address string) (Conn, error)
-	MultipathTCP() bool	
+	MultipathTCP() bool
 	// SetMultipathTCP(use)   // Use WithSetMultipathTCP
 }
 
@@ -70,7 +70,7 @@ func WithCancel(c <-chan struct{}) DialerOption {
 
 func WithResolver(r Resolver) DialerOption {
 	return func(dia *net.Dialer) {
-	    dia.Resolver = r.GetUnderlyingResolver()
+		dia.Resolver = r.GetUnderlyingResolver()
 	}
 }
 
@@ -99,7 +99,7 @@ func (_ netFacade) NewDialer(options ...DialerOption) Dialer {
 		opt(&dialer)
 	}
 
-	return dialerFacade{ dialer: &dialer }
+	return dialerFacade{dialer: &dialer}
 }
 
 func (d dialerFacade) Dial(network, address string) (Conn, error) {
@@ -110,7 +110,6 @@ func (d dialerFacade) DialContext(ctx context.Context, network, address string) 
 	return d.dialer.DialContext(ctx, network, address)
 }
 
-func (d dialerFacade) MultipathTCP() bool	 {
+func (d dialerFacade) MultipathTCP() bool {
 	return d.dialer.MultipathTCP()
 }
-

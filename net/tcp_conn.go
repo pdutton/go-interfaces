@@ -20,7 +20,7 @@ type TCPConn interface {
 	RemoteAddr() Addr
 	SetDeadline(t time.Time) error
 	SetKeepAlive(keepalive bool) error
-    SetKeepAliveConfig(config KeepAliveConfig) error
+	SetKeepAliveConfig(config KeepAliveConfig) error
 	SetKeepAlivePeriod(d time.Duration) error
 	SetLinger(sec int) error
 	SetNoDelay(noDelay bool) error
@@ -39,7 +39,7 @@ type tcpConnFacade struct {
 
 func (_ netFacade) DialTCP(network string, laddr, raddr *TCPAddr) (TCPConn, error) {
 	tcpc, err := net.DialTCP(network, laddr, raddr)
-	return tcpConnFacade{ tcpConn: tcpc }, err
+	return tcpConnFacade{tcpConn: tcpc}, err
 }
 
 func (tcpc tcpConnFacade) Close() error {
@@ -129,5 +129,3 @@ func (tcpc tcpConnFacade) Write(b []byte) (int, error) {
 func (tcpc tcpConnFacade) WriteTo(w io.Writer) (int64, error) {
 	return tcpc.tcpConn.WriteTo(w)
 }
-
-
