@@ -84,11 +84,11 @@ import (
 )
 
 type APIClient struct {
-    http client.HTTPClient
+    http http.Client
     io   io.IO
 }
 
-func NewAPIClient(httpClient client.HTTPClient, ioInterface io.IO) *APIClient {
+func NewAPIClient(httpClient http.Client, ioInterface io.IO) *APIClient {
     return &APIClient{
         http: httpClient,
         io:   ioInterface,
@@ -106,7 +106,7 @@ func (a *APIClient) FetchData(url string) ([]byte, error) {
 }
 ```
 
-In your tests, create mocks for `client.HTTPClient` and `io.IO` to test without real HTTP calls.
+In your tests, create mocks for `http.Client` and `io.IO` to test without real HTTP calls.
 
 ## License
 
