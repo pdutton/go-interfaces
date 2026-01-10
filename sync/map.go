@@ -44,26 +44,26 @@ func (m mapFacade) Delete(key any) {
 }
 
 func (m mapFacade) Load(key any) (any, bool) {
-    return m.Load(key)
+    return m.realMap.Load(key)
 }
 
 func (m mapFacade) LoadAndDelete(key any) (any, bool) {
-    return m.LoadAndDelete(key)
+    return m.realMap.LoadAndDelete(key)
 }
 
 func (m mapFacade) LoadOrStore(key, value any) (any, bool) {
-    return m.LoadOrStore(key, value)
+    return m.realMap.LoadOrStore(key, value)
 }
 
 func (m mapFacade) Range(f func(any, any) bool) {
-    m.Range(f)
+    m.realMap.Range(f)
 }
 
 func (m mapFacade) Store(key, value any) {
-    m.Store(key, value)
+    m.realMap.Store(key, value)
 }
 
 func (m mapFacade) Swap(key, value any) (any, bool) {
-    return m.Swap(key, value)
+    return m.realMap.Swap(key, value)
 }
 
