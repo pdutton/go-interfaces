@@ -6,6 +6,9 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 This repository provides interface wrappers for Go standard library packages to enable easy mocking in tests. Each package mirrors the structure of its corresponding standard library package while exposing mockable interfaces.
 
+## General Rules
+- Always work in a branch, not in master
+
 ## Common Commands
 
 ### Testing
@@ -15,6 +18,7 @@ This repository provides interface wrappers for Go standard library packages to 
 
 ### Formatting
 - Format all code: `make fmt` or `go fmt ./...`
+- Always format code before running tests or committing.
 
 ## Automated Code Reviews
 
