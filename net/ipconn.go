@@ -35,12 +35,12 @@ type ipConnFacade struct {
 func (_ netFacade) DialIP(network string, laddr, raddr *IPAddr) (IPConn, error) {
 	ipc, err := net.DialIP(network, laddr, raddr)
 
-	return ipConnFacade{ ipConn: ipc }, err
+	return ipConnFacade{ipConn: ipc}, err
 }
 func (_ netFacade) ListenIP(network string, laddr *IPAddr) (IPConn, error) {
 	ipc, err := net.ListenIP(network, laddr)
 
-	return ipConnFacade{ ipConn: ipc }, err
+	return ipConnFacade{ipConn: ipc}, err
 }
 
 func (ipc ipConnFacade) Close() error {
@@ -114,5 +114,3 @@ func (ipc ipConnFacade) WriteTo(b []byte, addr Addr) (int, error) {
 func (ipc ipConnFacade) WriteToIP(b []byte, addr *IPAddr) (int, error) {
 	return ipc.ipConn.WriteToIP(b, addr)
 }
-
-

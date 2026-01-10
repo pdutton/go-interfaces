@@ -1,13 +1,12 @@
 package net
 
 import (
-    "net"
+	"net"
 )
 
 var (
-    JoinHostPort  = net.JoinHostPort
-    ParseCIDR     = net.ParseCIDR
-    Pipe          = net.Pipe
-    SplitHostPort = net.SplitHostPort
+	JoinHostPort  = net.JoinHostPort
+	ParseCIDR     = net.ParseCIDR
+	Pipe          = net.Pipe
+	SplitHostPort = net.SplitHostPort
 )
-

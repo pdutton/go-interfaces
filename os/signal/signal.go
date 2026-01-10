@@ -12,7 +12,7 @@ type Signal interface {
 	Notify(c chan<- os.Signal, sig ...os.Signal)
 	NotifyContext(parent context.Context, signals ...os.Signal) (ctxt context.Context, stop context.CancelFunc)
 	Reset(sig ...os.Signal)
-	Stop(c chan<-os.Signal)
+	Stop(c chan<- os.Signal)
 }
 
 type signalFacade struct{}
@@ -41,7 +41,6 @@ func (_ signalFacade) Reset(sig ...os.Signal) {
 	signal.Reset(sig...)
 }
 
-func (_ signalFacade) Stop(c chan<-os.Signal) {
+func (_ signalFacade) Stop(c chan<- os.Signal) {
 	signal.Stop(c)
 }
-

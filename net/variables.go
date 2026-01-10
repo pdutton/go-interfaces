@@ -19,6 +19,6 @@ var (
 
 	DefaultResolver = wrapResolver(net.DefaultResolver)
 
-	ErrClosed = net.ErrClosed
+	ErrClosed           = net.ErrClosed
 	ErrWriteToConnected = net.ErrWriteToConnected
 )

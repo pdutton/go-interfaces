@@ -24,7 +24,7 @@ type tcpListenerFacade struct {
 func (_ netFacade) ListenTCP(network string, laddr *TCPAddr) (TCPListener, error) {
 	tcpl, err := net.ListenTCP(network, laddr)
 
-	return tcpListenerFacade{ tcpListener: tcpl }, err
+	return tcpListenerFacade{tcpListener: tcpl}, err
 }
 
 func (f tcpListenerFacade) Accept() (Conn, error) {
@@ -54,4 +54,3 @@ func (f tcpListenerFacade) SetDeadline(t time.Time) error {
 func (f tcpListenerFacade) SyscallConn() (syscall.RawConn, error) {
 	return f.tcpListener.SyscallConn()
 }
-
