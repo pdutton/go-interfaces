@@ -3,12 +3,14 @@ package os
 import (
 	"os"
 	"os/exec"
+	"runtime"
 	"testing"
 )
 
 func TestWrapProcessState(t *testing.T) {
 	// Run a simple command to get a ProcessState
-	cmd := exec.Command("true")
+	// Use "go version" which exists on all platforms where Go tests run
+	cmd := exec.Command("go", "version")
 	err := cmd.Run()
 	if err != nil {
 		t.Fatalf("Command failed: %v", err)
@@ -26,7 +28,7 @@ func TestWrapProcessState(t *testing.T) {
 }
 
 func TestProcessState_Nub(t *testing.T) {
-	cmd := exec.Command("true")
+	cmd := exec.Command("go", "version")
 	err := cmd.Run()
 	if err != nil {
 		t.Fatalf("Command failed: %v", err)
@@ -41,7 +43,7 @@ func TestProcessState_Nub(t *testing.T) {
 }
 
 func TestProcessState_SuccessfulCommand(t *testing.T) {
-	cmd := exec.Command("true")
+	cmd := exec.Command("go", "version")
 	err := cmd.Run()
 	if err != nil {
 		t.Fatalf("Command failed: %v", err)
@@ -72,10 +74,11 @@ func TestProcessState_SuccessfulCommand(t *testing.T) {
 }
 
 func TestProcessState_FailedCommand(t *testing.T) {
-	cmd := exec.Command("false")
+	// Use "go help nonexistent-command" which returns non-zero exit code cross-platform
+	cmd := exec.Command("go", "help", "nonexistent-command-that-does-not-exist")
 	err := cmd.Run()
 	if err == nil {
-		t.Skip("'false' command did not fail as expected")
+		t.Skip("Command did not fail as expected")
 	}
 
 	ps := WrapProcessState(cmd.ProcessState)
@@ -94,7 +97,7 @@ func TestProcessState_FailedCommand(t *testing.T) {
 }
 
 func TestProcessState_Sys(t *testing.T) {
-	cmd := exec.Command("true")
+	cmd := exec.Command("go", "version")
 	err := cmd.Run()
 	if err != nil {
 		t.Fatalf("Command failed: %v", err)
@@ -110,7 +113,7 @@ func TestProcessState_Sys(t *testing.T) {
 }
 
 func TestProcessState_SysUsage(t *testing.T) {
-	cmd := exec.Command("true")
+	cmd := exec.Command("go", "version")
 	err := cmd.Run()
 	if err != nil {
 		t.Fatalf("Command failed: %v", err)
@@ -126,7 +129,7 @@ func TestProcessState_SysUsage(t *testing.T) {
 }
 
 func TestProcessState_Times(t *testing.T) {
-	cmd := exec.Command("true")
+	cmd := exec.Command("go", "version")
 	err := cmd.Run()
 	if err != nil {
 		t.Fatalf("Command failed: %v", err)
@@ -148,9 +151,7 @@ func TestProcessState_Times(t *testing.T) {
 
 func TestProcessState_WithProcessWait(t *testing.T) {
 	// Test integration with Process.Wait()
-	osf := NewOS()
-
-	cmd := exec.Command("true")
+	cmd := exec.Command("go", "version")
 	err := cmd.Start()
 	if err != nil {
 		t.Fatalf("Command Start() failed: %v", err)
@@ -176,14 +177,17 @@ func TestProcessState_WithProcessWait(t *testing.T) {
 	if nub == nil {
 		t.Error("Nub() returned nil")
 	}
-
-	// Silence unused variable warning
-	_ = osf
 }
 
 func TestProcessState_FindProcessAndWait(t *testing.T) {
-	// Start a command that we can find and wait on
-	cmd := exec.Command("sleep", "0.1")
+	// Use a command that takes a moment to run
+	var cmd *exec.Cmd
+	if runtime.GOOS == "windows" {
+		cmd = exec.Command("ping", "127.0.0.1", "-n", "1")
+	} else {
+		cmd = exec.Command("sleep", "0.1")
+	}
+
 	err := cmd.Start()
 	if err != nil {
 		t.Fatalf("Command Start() failed: %v", err)
@@ -210,13 +214,13 @@ func TestProcessState_FindProcessAndWait(t *testing.T) {
 func TestProcessState_StartProcessAndWait(t *testing.T) {
 	osf := NewOS()
 
-	// Find the 'true' command path
-	truePath, err := exec.LookPath("true")
+	// Find the 'go' command path - guaranteed to exist during tests
+	goPath, err := exec.LookPath("go")
 	if err != nil {
-		t.Skipf("'true' command not found: %v", err)
+		t.Fatalf("'go' command not found: %v", err)
 	}
 
-	proc, err := osf.StartProcess(truePath, []string{"true"}, &os.ProcAttr{})
+	proc, err := osf.StartProcess(goPath, []string{"go", "version"}, &os.ProcAttr{})
 	if err != nil {
 		t.Fatalf("StartProcess() error = %v", err)
 	}
