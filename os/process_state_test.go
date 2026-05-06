@@ -220,7 +220,10 @@ func TestProcessState_StartProcessAndWait(t *testing.T) {
 		t.Fatalf("'go' command not found: %v", err)
 	}
 
-	proc, err := osf.StartProcess(goPath, []string{"go", "version"}, &os.ProcAttr{})
+	attr := &os.ProcAttr{
+		Files: []*os.File{os.Stdin, os.Stdout, os.Stderr},
+	}
+	proc, err := osf.StartProcess(goPath, []string{"go", "version"}, attr)
 	if err != nil {
 		t.Fatalf("StartProcess() error = %v", err)
 	}

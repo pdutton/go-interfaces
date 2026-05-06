@@ -42,14 +42,13 @@ func TestSignal_Stop(t *testing.T) {
 func TestSignal_Ignore(t *testing.T) {
 	s := NewSignal()
 
-	// Ignore SIGHUP (safe to use in tests)
-	// On Windows, only SIGINT is supported, but Ignore shouldn't panic
-	s.Ignore(syscall.SIGHUP)
+	// Ignore SIGINT (available on all platforms)
+	s.Ignore(syscall.SIGINT)
 
 	// Verify Ignored returns true
 	// Note: This may not work on all platforms
 	// Just verify it doesn't panic
-	_ = s.Ignored(syscall.SIGHUP)
+	_ = s.Ignored(syscall.SIGINT)
 }
 
 func TestSignal_Ignored(t *testing.T) {
@@ -66,10 +65,10 @@ func TestSignal_Reset(t *testing.T) {
 	s := NewSignal()
 
 	// Ignore a signal first
-	s.Ignore(syscall.SIGHUP)
+	s.Ignore(syscall.SIGINT)
 
 	// Reset should restore default behavior
-	s.Reset(syscall.SIGHUP)
+	s.Reset(syscall.SIGINT)
 
 	// Verify Reset doesn't panic
 }
@@ -165,7 +164,7 @@ func TestSignal_ResetAll(t *testing.T) {
 	s := NewSignal()
 
 	// Ignore some signals
-	s.Ignore(syscall.SIGHUP, syscall.SIGUSR1)
+	s.Ignore(syscall.SIGINT, syscall.SIGTERM)
 
 	// Reset all
 	s.Reset()

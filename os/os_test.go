@@ -2,6 +2,7 @@ package os
 
 import (
 	"path/filepath"
+	"runtime"
 	"strings"
 	"testing"
 )
@@ -438,6 +439,9 @@ func TestOS_Getppid(t *testing.T) {
 }
 
 func TestOS_Getuid(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Getuid returns -1 on Windows")
+	}
 	os := NewOS()
 
 	uid := os.Getuid()
@@ -448,6 +452,9 @@ func TestOS_Getuid(t *testing.T) {
 }
 
 func TestOS_Getgid(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Getgid returns -1 on Windows")
+	}
 	os := NewOS()
 
 	gid := os.Getgid()
@@ -457,6 +464,9 @@ func TestOS_Getgid(t *testing.T) {
 }
 
 func TestOS_Geteuid(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Geteuid returns -1 on Windows")
+	}
 	os := NewOS()
 
 	euid := os.Geteuid()
@@ -466,6 +476,9 @@ func TestOS_Geteuid(t *testing.T) {
 }
 
 func TestOS_Getegid(t *testing.T) {
+	if runtime.GOOS == "windows" {
+		t.Skip("Getegid returns -1 on Windows")
+	}
 	os := NewOS()
 
 	egid := os.Getegid()
