@@ -29,3 +29,10 @@ go.work.sum
 .swo
 .*.swp
 .*.swo
+
+# Local settings
+.claude/*.local.json
+
+# IDEs:
+.vscode/
+.idea/

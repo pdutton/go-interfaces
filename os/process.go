@@ -10,7 +10,7 @@ type Process interface {
 	Kill() error
 	Release() error
 	Signal(Signal) error
-	Wait() (*ProcessState, error)
+	Wait() (ProcessState, error)
 
 	// Return the underlying process object
 	Nub() *os.Process
@@ -68,6 +68,10 @@ func (p processFacade) Signal(sig Signal) error {
 	return p.nub.Signal(sig)
 }
 
-func (p processFacade) Wait() (*ProcessState, error) {
-	return p.nub.Wait()
+func (p processFacade) Wait() (ProcessState, error) {
+	ps, err := p.nub.Wait()
+	if err != nil {
+		return nil, err
+	}
+	return WrapProcessState(ps), nil
 }
